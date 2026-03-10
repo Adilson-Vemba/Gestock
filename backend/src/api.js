@@ -1,10 +1,11 @@
 import fs from 'fs';
 import express from 'express';
+import cors from 'cors';
 import multer from 'multer';
 import path from "path";
 
 import { Product, Order, Invoice, Supplier, SupplierRequest } from './models.js';
-import { serve, setup } from 'swagger-ui-express' 
+import { serve, setup } from 'swagger-ui-express'
 
 import swaggerDocument from './swagger.json' with { type: "json" }
 
@@ -16,15 +17,16 @@ if (!fs.existsSync(UPLOAD_PATH)) fs.mkdirSync(UPLOAD_PATH, { recursive: true });
 const uploadDir = path.resolve("uploads");
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, uploadDir),
-    filename: (req, file, cb) => {
-        cb(null, `${Date.now()} - ${file.originalname}`)
-    }
+  destination: (req, file, cb) => cb(null, uploadDir),
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()} - ${file.originalname}`)
+  }
 })
 
 const app = express();
 
-app.use(express.json()); 
+app.use(cors());
+app.use(express.json());
 app.use("/api-docs", serve, setup(swaggerDocument))
 
 const upload = multer({ storage })
@@ -37,22 +39,22 @@ app.post("/products", upload.single("photo"), async (req, res) => {
   try {
     const { name, price, quantity: productQuantity } = req.body
     const photoPath = req.file ? req.file.path : null
-    
+
     if (!name || !price) {
-        return res.status(400).json({ error: "Nome e preço são obrigatórios" })
+      return res.status(400).json({ error: "Nome e preço são obrigatórios" })
     }
-    
+
     if (price <= 0) {
-        return res.status(400).json({ error:  "Preço deve ser maior que 0" })
+      return res.status(400).json({ error: "Preço deve ser maior que 0" })
     }
-    
+
     const product = await Product.create({
-        name,
-        price,
-        quantity: productQuantity ? productQuantity : 0,
-        photo: photoPath
+      name,
+      price,
+      quantity: productQuantity ? productQuantity : 0,
+      photo: photoPath
     })
-    
+
     res.status(201).json(product)
   } catch (error) {
     res.status(500).json({ error })
@@ -63,11 +65,11 @@ app.get("/products/:code", async (req, res) => {
   try {
     const { code } = req.params;
     const product = await Product.findByCode(code)
-    
+
     if (!product) {
-        return res.status(404).json({ error: "Produto não encontrado" });
+      return res.status(404).json({ error: "Produto não encontrado" });
     }
-    
+
     res.json(product);
   } catch (error) {
     res.status(500).json({ error })
@@ -113,33 +115,33 @@ app.post("/orders", async (req, res) => {
     const { products } = req.body
 
     if (!products || products.length === 0) {
-      return res.status(400).json({ error: "Nenhum produto foi informado"})
+      return res.status(400).json({ error: "Nenhum produto foi informado" })
     }
 
     let orderProducts = []
 
     for (const product of products) {
       const { code, quantity: OrderQuantity } = product
-      
+
       if (OrderQuantity <= 0) {
-        return res.status(400).json({ error: "Insira a quantidade mínima"})
+        return res.status(400).json({ error: "Insira a quantidade mínima" })
       }
 
       const foundProduct = await Product.findByCode(code)
-      
+
       if (!foundProduct) {
         return res.status(404).json({ error: "Produto não encontrado" })
       }
-      
+
       if (foundProduct.quantity <= 0) {
         return res.status(400).json({ error: `Produto esgotado (${foundProduct.name})` })
       }
-      
+
       if (foundProduct.quantity < OrderQuantity) {
         return res.status(400).json({ error: `Estoque é insuficiente (${foundProduct.name} -> ${foundProduct.quantity})` })
       }
-      
-      foundProduct.quantity -= OrderQuantity  
+
+      foundProduct.quantity -= OrderQuantity
       await foundProduct.save()
 
       orderProducts.push({
@@ -147,12 +149,12 @@ app.post("/orders", async (req, res) => {
         quantity: product.quantity
       })
     }
-      
+
     const order = await Order.create({ products: orderProducts })
     const invoice = await (await Invoice.create({ order: order._id })).populate({
-        path: 'order',
-        populate: { path: 'products.product' }
-    })  
+      path: 'order',
+      populate: { path: 'products.product' }
+    })
 
     res.json({ invoice })
   } catch (error) {
@@ -162,7 +164,7 @@ app.post("/orders", async (req, res) => {
 
 app.get("/orders", async (req, res) => {
   try {
-    const orders = await Order.find() 
+    const orders = await Order.find()
       .select("-createdAt")
       .populate({
         path: "products.product"
@@ -188,7 +190,7 @@ app.get("/orders/:id", async (req, res) => {
 
     res.json({ order })
   } catch (error) {
-    res.status(500).json({ error})
+    res.status(500).json({ error })
   }
 })
 
@@ -274,7 +276,7 @@ app.post("/suppliers/:id/request", async (req, res) => {
         quantity
       })
     }
-    
+
     const supplierRequest = await SupplierRequest.create({
       supplier: supplier._id,
       products: requestedProducts
@@ -289,7 +291,7 @@ app.post("/suppliers/:id/request", async (req, res) => {
 })
 
 app.get("/suppliers/history", async (req, res) => {
-  try {    
+  try {
     const { status } = req.query
     const supplierRequests = await SupplierRequest
       .find(status ? { status: status.toUpperCase() } : {})
@@ -305,12 +307,12 @@ app.patch("/suppliers/change-request-status/:id", async (req, res) => {
   try {
     const { id } = req.params
     let { status } = req.body
-    const supplierRequest = await SupplierRequest.findById(id) 
-    
+    const supplierRequest = await SupplierRequest.findById(id)
+
     if (!supplierRequest) {
       return res.status(404).json({ error: "Pedido não encontrado" })
     }
-    
+
     if (!status || !["ACEITE", "RECUSADO"].includes(status)) {
       return res.status(400).json({ error: "Status inválido" })
     }
@@ -318,22 +320,22 @@ app.patch("/suppliers/change-request-status/:id", async (req, res) => {
     if (supplierRequest.status !== "PENDENTE") {
       return res.status(400).json({ error: "Status já foi definido" })
     }
-    
+
     status = status.toUpperCase()
     supplierRequest.status = status
     await supplierRequest.save()
-    
+
     if (supplierRequest.status === "ACEITE") {
       for (const product of supplierRequest.products) {
         const { product: id, quantity } = product
-        
+
         const foundProduct = await Product.findById(id)
         foundProduct.quantity += quantity
 
         await foundProduct.save()
       }
     }
-    
+
     res.json({ supplierRequest })
   } catch (error) {
     res.json({ error: `${error}` })
@@ -344,14 +346,14 @@ app.get("/stats/graph", async (req, res) => {
   try {
     const topProducts = await Order.aggregate([
       { $unwind: "$products" },
-      { 
+      {
         $group: {
           _id: "$products.product",
           totalQuantity: { $sum: "$products.quantity" }
         }
       },
       { $sort: { totalQuantity: -1 } },
-      { 
+      {
         $lookup: {
           from: "products",
           localField: "_id",
