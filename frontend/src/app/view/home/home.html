@@ -1,0 +1,156 @@
+<app-navbar></app-navbar>
+<app-menu></app-menu>
+<div class="content-container">
+    <article class="message">
+
+        <!-- Cabeçalho -->
+        <div class="message-header">
+            <i class="fa-solid fa-dollar-sign"></i>
+            <p>CONTROLE O FLUXO DA SUA MERCADORIA</p>
+            <i class="fa-solid fa-dollar-sign"></i>
+        </div>
+
+        <!-- Corpo da Mensagem -->
+        <div class="message-body">
+
+            <!-- Secção da Introdução -->
+            <div class="columns">
+                <div class="column">
+                    <figure class="is-128x128">
+                        <img class="is-rounded" src="/images/img1.jpg" alt="Imagem" />
+                    </figure>
+                </div>
+
+                <div class="column is-9">
+                    <p>
+                        Gerencie cada etapa do seu negócio com eficiência e segurança.
+                        Nossa solução garante que suas operações sejam organizadas, reduzindo falhas e otimizando
+                        processos para que você tenha sempre o controle total do que entra e do que sai.
+                    </p>
+
+                    <p>
+                        Monitore, acompanhe e tome decisões assertivas com informações claras e objetivas.
+                        O fluxo da sua mercadoria deixa de ser um desafio e passa a ser um diferencial competitivo.
+                    </p>
+
+                    <p class="title is-5">
+                        <span class="tag is-dark is-medium">Tecnologia & Gestão</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Secção dos Módulos -->
+            <div class="container">
+                <div class="columns is-centered">
+
+                    <!-- Compras -->
+                    <div class="column custom-column">
+                        <div class="box custom-box">
+                            <article class="message is-info">
+                                <div class="message-header">
+                                    <p>COMPRAS</p>
+                                </div>
+
+                                <ul class="styled-list">
+                                    <li>Ordens de compra</li>
+                                    <li>Cotações de compra</li>
+                                    <li>Fornecedores</li>
+                                </ul>
+                            </article>
+                        </div>
+                    </div>
+
+                    <!-- Vendas -->
+                    <div class="column custom-column">
+                        <div class="box custom-box">
+                            <article class="message is-success">
+                                <div class="message-header">
+                                    <p>VENDAS</p>
+                                </div>
+
+                                <ul class="styled-list">
+                                    <li>Pedidos de venda</li>
+                                    <li>Clientes</li>
+                                    <li>Cotações de vendas</li>
+                                </ul>
+                            </article>
+                        </div>
+                    </div>
+
+                    <!-- Inventário -->
+                    <div class="column custom-column">
+                        <div class="box custom-box">
+                            <article class="message is-info">
+                                <div class="message-header">
+                                    <p>INVENTÁRIO</p>
+                                </div>
+
+                                <ul class="styled-list">
+                                    <li>Digitalizações de estoque</li>
+                                    <li>Estoque atual</li>
+                                    <li>Ajustes de estoque</li>
+                                </ul>
+                            </article>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Secção dos Relatórios -->
+            <article>
+                <div class="title is-5 has-text-centered relatorio-header">
+                    <h5>RELATÓRIOS</h5>
+                </div>
+
+                <div>
+
+                    <div class="columns is-centered">
+
+                        <!-- Relatório Compras -->
+                        <div class="column custom-column">
+                            <div class="box custom-box">
+                                <article>
+                                    <div class="chart-container">
+                                        <canvas id="comprasChart"></canvas>
+                                    </div>
+                                </article>
+                                <p class="subtitle">COMPRA</p>
+                            </div>
+                        </div>
+
+                        <!-- Relatório Vendas -->
+                        <div class="column custom-column">
+                            <div class="box custom-box">
+                                <article>
+                                    <div class="chart-container">
+                                        <canvas id="vendasChart"></canvas>
+                                    </div>
+                                </article>
+                                <p class="subtitle">VENDA</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Relatório Inventário -->
+                    <div class="columns is-centered">
+                        <div class="column is-half custom-column">
+                            <div class="box custom-box">
+                                <article>
+                                    <div class="chart-container">
+                                        <canvas id="inventarioChart"></canvas>
+                                    </div>
+                                </article>
+                                <p class="subtitle">INVENTÁRIO</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </article>
+
+            <br><br><br>
+        </div>
+    </article>
+</div>

@@ -1,0 +1,485 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "StockManager API",
+    "description": "API para gestão de estoque, compras e vendas",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001",
+      "description": "Servidor de desenvolvimento"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Products",
+      "description": "Operações relacionadas a produtos"
+    },
+    {
+      "name": "Orders",
+      "description": "Operações relacionadas a pedidos"
+    },
+    {
+      "name": "Purchases",
+      "description": "Operações relacionadas a compras"
+    }
+  ],
+  "paths": {
+    "/products": {
+      "post": {
+        "tags": ["Products"],
+        "summary": "Criar um novo produto",
+        "description": "Cria um novo produto com possibilidade de upload de foto",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome do produto"
+                  },
+                  "price": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Preço do produto"
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "description": "Quantidade em estoque",
+                    "default": 0
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Foto do produto"
+                  }
+                },
+                "required": ["name", "price"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Produto criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos fornecidos"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Products"],
+        "summary": "Listar todos os produtos",
+        "description": "Retorna uma lista de todos os produtos cadastrados",
+        "responses": {
+          "200": {
+            "description": "Lista de produtos retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/products/{code}": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Obter produto por código",
+        "description": "Retorna um produto específico baseado no código",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "description": "Código do produto",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Produto não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Products"],
+        "summary": "Atualizar produto",
+        "description": "Atualiza um produto existente",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "description": "Código do produto",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome do produto"
+                  },
+                  "price": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Preço do produto"
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "description": "Quantidade em estoque"
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Foto do produto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Produto atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Produto não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/order": {
+      "post": {
+        "tags": ["Orders"],
+        "summary": "Criar um pedido",
+        "description": "Cria um novo pedido e gera uma fatura",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "Código do produto"
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "description": "Quantidade do pedido"
+                  }
+                },
+                "required": ["code", "quantity"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Pedido criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "invoice": {
+                      "$ref": "#/components/schemas/Invoice"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos ou estoque insuficiente"
+          },
+          "404": {
+            "description": "Produto não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Orders"],
+        "summary": "Listar todos os pedidos",
+        "description": "Retorna uma lista de todos os pedidos",
+        "responses": {
+          "200": {
+            "description": "Lista de pedidos retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/purchases": {
+      "post": {
+        "tags": ["Purchases"],
+        "summary": "Registrar compra",
+        "description": "Registra uma compra e atualiza o estoque do produto",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "productId": {
+                    "type": "string",
+                    "description": "Código do produto"
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "description": "Quantidade comprada"
+                  }
+                },
+                "required": ["productId", "quantity"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Compra registrada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "purchase": {
+                      "type": "object",
+                      "properties": {
+                        "product": {
+                          "type": "string"
+                        },
+                        "quantity": {
+                          "type": "integer"
+                        },
+                        "date": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    },
+                    "updatedProduct": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos fornecidos"
+          },
+          "404": {
+            "description": "Produto não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Purchases"],
+        "summary": "Listar histórico de compras",
+        "description": "Retorna o histórico de compras e atualizações de estoque",
+        "responses": {
+          "200": {
+            "description": "Histórico de compras retornado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "quantity": {
+                            "type": "integer"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "ID único do produto"
+          },
+          "code": {
+            "type": "string",
+            "description": "Código do produto"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do produto"
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "description": "Preço do produto"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "Quantidade em estoque"
+          },
+          "photo": {
+            "type": "string",
+            "description": "Caminho da foto do produto"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de criação"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de última atualização"
+          }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "ID único do pedido"
+          },
+          "product": {
+            "type": "string",
+            "description": "ID do produto"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "Quantidade do pedido"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de última atualização"
+          }
+        }
+      },
+      "Invoice": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "ID único da fatura"
+          },
+          "order": {
+            "$ref": "#/components/schemas/Order"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de criação"
+          }
+        }
+      }
+    }
+  }
+}

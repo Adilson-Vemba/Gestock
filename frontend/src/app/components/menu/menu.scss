@@ -1,0 +1,47 @@
+.menu-sidebar {
+  width: 60px;
+  background-color: #ffffff;
+  height: calc(70vh - 60px); // altura total menos a navbar
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 60px;   // começa logo abaixo da navbar
+  left: 0;     // sidebar à esquerda
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1rem;
+ 
+
+
+  .menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin: 1.5rem 0;
+
+      a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #4a4a4a;
+        font-size: 1.5rem;
+        transition: background-color 0.2s, color 0.2s;
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+
+        &:hover {
+          background-color: #3498db;
+          color: white;
+        }
+
+        &.is-active {
+          background-color: #3498db;
+          color: white;
+        }
+      }
+    }
+  }
+}

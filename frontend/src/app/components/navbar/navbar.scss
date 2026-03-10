@@ -1,0 +1,23 @@
+/* navbar.component.scss */
+.navbar {
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .navbar-item.has-dropdown .navbar-link {
+    padding: 0;
+  }
+
+  .image.is-32x32 img {
+    cursor: pointer;
+    border-radius: 50%;
+    height: 50%;
+    width: 50%;
+  
+
+  }
+
+  .navbar-dropdown {
+    border-radius: 6px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+}

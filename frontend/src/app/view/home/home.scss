@@ -1,0 +1,100 @@
+
+
+
+.content-container {
+  display: flex;
+  justify-content: center;  // Centraliza na horizontal
+  align-items: center;      // Centraliza na vertical
+  min-height: calc(100vh - 300px);
+  padding: 20px;
+  
+
+  .message {
+    max-width: 1000px;
+    width: 100%;
+    height: 300px;
+
+    .message-header {
+      background: #3498db;
+      font-weight: bold;
+    }
+
+    .message-body {
+      background: #fff;
+      line-height: 1.5;
+      height: 230px;
+    }
+
+   
+    border: #b6bdbc 0.5px solid;
+  }
+}
+
+
+.custom-column {
+  flex: 0 0 35%; // aumenta um pouco a largura (default seria ~33%)
+  max-width: 35%;
+}
+
+.custom-box {
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+}
+
+.container {
+  margin-top: 50px;
+}
+
+.titulo {
+
+    display: flex;
+    flex-direction: flex;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+}
+
+.styled-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+
+  li {
+    background: #f0f4f8;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 0px;
+    font-weight: 300;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      background: #e3e5e7; // cor padrão do Bulma is-info
+      color: black;
+      transform: translateY(-2px);
+      box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
+//relatório
+
+.relatorio-header {
+  
+  margin-top: 30px;
+  padding: 10px;
+  border-radius: 5px 5px 0 0;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.is-rounded {
+  border-radius: 15px;
+  height: 200px;
+}

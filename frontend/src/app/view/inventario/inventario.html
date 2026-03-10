@@ -1,0 +1,78 @@
+<app-navbar></app-navbar>
+<app-menu></app-menu>
+<div class="inventory-container">
+
+  <!-- Cabeçalho -->
+  <header class="inventory-header">
+    <div class="title">
+      <i class="fas fa-boxes"></i>
+      <h2>Inventário</h2>
+    </div>
+
+    <button class="btn-primary">
+      <i class="fas fa-plus"></i>
+      Novo Produto
+    </button>
+  </header>
+
+  <!-- Filtros -->
+  <section class="inventory-filters">
+    <input type="text" placeholder="Pesquisar produto..." />
+    
+    <select>
+      <option value="">Todos</option>
+      <option value="low">Baixo estoque</option>
+      <option value="ok">Estoque normal</option>
+    </select>
+  </section>
+
+  <!-- Tabela -->
+  <section class="inventory-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Preço</th>
+          <th>Quantidade</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let product of products">
+          <td class="product">
+            <div class="avatar">
+              <i class="fas fa-box"></i>
+            </div>
+            <span>{{ product.name }}</span>
+          </td>
+
+          <td>{{ product.price }} Kz</td>
+          <td>{{ product.quantity }}</td>
+
+          <td>
+            <span 
+              class="status"
+              [class.low]="product.quantity < 5"
+              [class.ok]="product.quantity >= 5">
+              {{ product.quantity < 5 ? 'Baixo estoque' : 'Normal' }}
+            </span>
+          </td>
+
+          <td class="actions">
+            <button title="Editar">
+              <i class="fas fa-pen"></i>
+            </button>
+
+            <button title="Entrada de estoque">
+              <i class="fas fa-plus-circle"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
+

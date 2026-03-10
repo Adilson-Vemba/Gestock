@@ -1,0 +1,23 @@
+<app-default-login-layout
+  title="Bem-vindo de volta!"
+  primarybtnText="Entrar"
+  secondarybtnText="Cadastrar-se"
+  (submit)="submit()"
+  (secondaryAction)="irParaCadastro()"
+>
+  <form [formGroup]="loginForm">
+    <app-primary-input 
+      label="Seu Email"
+      type="email" 
+      formName="email"
+      placeholder="Email"
+    ></app-primary-input>
+
+    <app-primary-input 
+      label="Sua Senha"
+      type="password" 
+      formName="password"
+      placeholder="Senha"
+    ></app-primary-input>
+  </form>
+</app-default-login-layout>

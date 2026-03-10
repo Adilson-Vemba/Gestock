@@ -1,0 +1,61 @@
+<app-navbar></app-navbar>
+<app-menu></app-menu>
+<div class="reports-container">
+
+  <!-- Cabeçalho -->
+  <header class="reports-header">
+    <div class="title">
+      <i class="fas fa-chart-line"></i>
+      <h2>Relatórios</h2>
+    </div>
+  </header>
+
+  <!-- Resumo -->
+  <section class="reports-summary">
+    <div class="summary-card">
+      <span>Total de Vendas</span>
+      <strong>42</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Receita Total</span>
+      <strong>1 250 000 Kz</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Total Compras</span>
+      <strong>620 000 Kz</strong>
+    </div>
+  </section>
+
+  <!-- Gráficos -->
+  <section class="reports-charts">
+
+    <div class="chart-card">
+      <h3>Vendas Mensais</h3>
+      <canvas id="salesChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h3>Compras Mensais</h3>
+      <canvas id="purchasesChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h3>Produtos Mais Vendidos</h3>
+      <ul class="product-list">
+        <li *ngFor="let product of mostSold">{{ product.name }} - {{ product.quantity }} vendidos</li>
+      </ul>
+    </div>
+
+    <div class="chart-card">
+      <h3>Produtos Menos Vendidos</h3>
+      <ul class="product-list">
+        <li *ngFor="let product of leastSold">{{ product.name }} - {{ product.quantity }} vendidos</li>
+      </ul>
+    </div>
+
+  </section>
+
+</div>
+

@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: express-web
+    env: docker
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production

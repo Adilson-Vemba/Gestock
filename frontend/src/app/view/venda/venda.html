@@ -1,0 +1,87 @@
+<app-navbar></app-navbar>
+<app-menu></app-menu>
+<div class="sales-container">
+
+  <!-- Cabeçalho -->
+  <header class="sales-header">
+    <div class="title">
+      <i class="fas fa-dollar-sign"></i>
+      <h2>Vendas</h2>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-secondary">
+        <i class="fas fa-filter"></i>
+        Filtrar
+      </button>
+
+      <button class="btn-primary">
+        <i class="fas fa-plus"></i>
+        Nova Venda
+      </button>
+    </div>
+  </header>
+
+  <!-- Resumo -->
+  <section class="sales-summary">
+    <div class="summary-card">
+      <span>Total de Vendas</span>
+      <strong>18</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Receita</span>
+      <strong>420 000 Kz</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Hoje</span>
+      <strong>58 000 Kz</strong>
+    </div>
+  </section>
+
+  <!-- Tabela de vendas -->
+  <section class="sales-table">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Data</th>
+          <th>Cliente</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let sale of sales">
+          <td>{{ sale.id }}</td>
+          <td>{{ sale.date }}</td>
+          <td>{{ sale.customer }}</td>
+          <td>{{ sale.total }} Kz</td>
+
+          <td>
+            <span
+              class="status"
+              [class.paid]="sale.status === 'Paga'"
+              [class.pending]="sale.status === 'Pendente'">
+              {{ sale.status }}
+            </span>
+          </td>
+
+          <td class="actions">
+            <button title="Ver detalhes">
+              <i class="fas fa-eye"></i>
+            </button>
+
+            <button title="Fatura">
+              <i class="fas fa-file-invoice"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>

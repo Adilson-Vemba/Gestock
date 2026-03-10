@@ -1,0 +1,136 @@
+.purchases-container {
+  margin-left: 60px;
+  margin-top: 4px;
+  padding: 1.5rem;
+  background-color: #f6f7fb;
+  min-height: calc(100vh - 60px);
+}
+
+/* Header */
+.purchases-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+
+    i {
+      color: #3498db;
+      font-size: 1.4rem;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+  }
+}
+
+/* Botão */
+.btn-primary {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+
+  i {
+    margin-right: 0.3rem;
+  }
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+/* Resumo */
+.purchases-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  .summary-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+
+    span {
+      font-size: 0.75rem;
+      color: #777;
+    }
+
+    strong {
+      font-size: 1.3rem;
+    }
+  }
+}
+
+/* Tabela */
+.purchases-table {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      font-size: 0.8rem;
+      color: #666;
+      text-align: left;
+      padding-bottom: 0.7rem;
+    }
+
+    td {
+      padding: 0.8rem 0;
+      border-top: 1px solid #eee;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+/* Status */
+.status {
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 500;
+
+  &.received {
+    background-color: #e0f7f4;
+    color: #3498db;
+  }
+
+  &.pending {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+}
+
+/* Ações */
+.actions {
+  display: flex;
+  gap: 0.5rem;
+
+  button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #555;
+
+    &:hover {
+      color: #3498db;
+    }
+  }
+}
