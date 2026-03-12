@@ -21,12 +21,12 @@ export class Login {
   constructor(
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
-  
+
   irParaCadastro() {
-  this.router.navigate(['/cadastro']);
-}
+    this.router.navigate(['/cadastro']);
+  }
 
   submit() {
     if (this.loginForm.invalid) return;
@@ -35,7 +35,7 @@ export class Login {
       .subscribe({
         next: (res) => {
           localStorage.setItem('token', res.token);
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/inventario']);
         },
         error: () => {
           alert('Email ou senha inválidos');

@@ -66,8 +66,16 @@ const supplierRequestSchema = new Schema({
     },
 }, { timestamps: true, versionKey: false });
 
+const userSchema = new Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true }
+}, { timestamps: true, versionKey: false });
+
+
 export const Order = model('Order', orderSchema)
 export const Invoice = model('Invoice', invoiceSchema)
 export const Product = model('Product', productSchema)
 export const Supplier = model('Supplier', supplierSchema)
 export const SupplierRequest = model("SupplierRequest", supplierRequestSchema)
+export const User = model('User', userSchema)

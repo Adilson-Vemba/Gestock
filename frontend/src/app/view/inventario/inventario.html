@@ -9,7 +9,7 @@
       <h2>Inventário</h2>
     </div>
 
-    <button class="btn-primary">
+    <button class="btn-primary" (click)="novoProduto()">
       <i class="fas fa-plus"></i>
       Novo Produto
     </button>
@@ -61,7 +61,7 @@
           </td>
 
           <td class="actions">
-            <button title="Editar">
+            <button title="Editar" (click)="editarProduto(product)">
               <i class="fas fa-pen"></i>
             </button>
 

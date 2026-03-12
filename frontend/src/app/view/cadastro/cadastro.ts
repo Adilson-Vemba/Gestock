@@ -19,17 +19,18 @@ export class Cadastro {
     senha: new FormControl('', [Validators.required, Validators.minLength(6)]),
     confirmarSenha: new FormControl('', Validators.required)
   });
-  
+
 
   constructor(
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   submit() {
     if (this.cadastroForm.invalid) return;
 
-    const { confirmarSenha, ...data } = this.cadastroForm.value;
+    const { confirmarSenha, nome, senha, email } = this.cadastroForm.value;
+    const data = { name: nome, password: senha, email };
 
     this.authService.register(data)
       .subscribe({
