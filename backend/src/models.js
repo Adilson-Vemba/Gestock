@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import moment from "moment-timezone";
 
-const { connect, Schema, model, models } =  mongoose;
+const { connect, Schema, model, models } = mongoose;
 
-connect(process.env.DB_URL)
+connect(process.env.DB_URL || 'mongodb://localhost:27017/stock_manager')
 
 function convertDate(date) {
     return moment(date).tz("Africa/Luanda").format()
@@ -25,7 +25,7 @@ mongoose.plugin((schema) => {
     })
 })
 const productSchema = new Schema({
-    code: { type: Schema.Types.ObjectId, auto: true}, 
+    code: { type: Schema.Types.ObjectId, auto: true },
     name: { type: String, required: true },
     price: { type: Number, required: true },
     photo: { type: String },
@@ -37,13 +37,13 @@ const orderSchema = new Schema({
     products: [
         {
             product: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
-            quantity: { type: Number, default: 1, min: 1}
+            quantity: { type: Number, default: 1, min: 1 }
         }
     ]
 }, { timestamps: true, versionKey: false })
 
 const invoiceSchema = new Schema({
-    order: { type: Schema.Types.ObjectId, ref: 'Order', required: true },  
+    order: { type: Schema.Types.ObjectId, ref: 'Order', required: true },
 }, { timestamps: true, versionKey: false })
 
 const supplierSchema = new Schema({
@@ -53,18 +53,18 @@ const supplierSchema = new Schema({
 
 const supplierRequestSchema = new Schema({
     supplier: { type: Schema.Types.ObjectId, ref: "Supplier", required: true },
-    products:[
+    products: [
         {
             product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
             quantity: { type: Number, min: 1 },
         }
     ],
-    status: { 
-        type: String, 
-        enum: ["PENDENTE", "ACEITE", "RECUSADO"], 
-        default: "PENDENTE" 
+    status: {
+        type: String,
+        enum: ["PENDENTE", "ACEITE", "RECUSADO"],
+        default: "PENDENTE"
     },
-}, { timestamps: true, versionKey: false});
+}, { timestamps: true, versionKey: false });
 
 export const Order = model('Order', orderSchema)
 export const Invoice = model('Invoice', invoiceSchema)
