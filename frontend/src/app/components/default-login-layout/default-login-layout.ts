@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-default-login-layout',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './default-login-layout.html',
   styleUrls: ['./default-login-layout.scss']
 })

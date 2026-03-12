@@ -8,6 +8,7 @@ import { ProductService } from '../../services/product';
 
 @Component({
   selector: 'app-inventario',
+  standalone: true,
   imports: [CommonModule, Navbar, Menu],
   templateUrl: './inventario.html',
   styleUrl: './inventario.scss'
@@ -48,6 +49,16 @@ export class Inventario implements OnInit {
     const price = prompt('Novo preço:', product.price);
     if (name && price) {
       this.productService.updateProduct(product.code || product._id, { name, price: Number(price) }).subscribe(() => {
+        this.carregarProdutos();
+      });
+    }
+  }
+
+  estoqueEntrada(product: any) {
+    const quantity = prompt(`Quantidade para adicionar ao estoque de ${product.name}:`);
+    if (quantity && !isNaN(Number(quantity))) {
+      const newQuantity = (product.quantity || 0) + Number(quantity);
+      this.productService.updateProduct(product.code || product._id, { quantity: newQuantity }).subscribe(() => {
         this.carregarProdutos();
       });
     }

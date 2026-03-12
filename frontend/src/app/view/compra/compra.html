@@ -9,7 +9,7 @@
       <h2>Compras aos Fornecedores</h2>
     </div>
 
-    <button class="btn-primary">
+    <button class="btn-primary" (click)="novaCompra()">
       <i class="fas fa-plus"></i>
       Nova Compra
     </button>
@@ -59,20 +59,18 @@
           <td>{{ purchase.total }} Kz</td>
 
           <td>
-            <span 
-              class="status"
-              [class.received]="purchase.status === 'Recebido'"
+            <span class="status" [class.received]="purchase.status === 'Recebido'"
               [class.pending]="purchase.status === 'Pendente'">
               {{ purchase.status }}
             </span>
           </td>
 
           <td class="actions">
-            <button title="Detalhes">
+            <button title="Detalhes" (click)="verDetalhes(purchase)">
               <i class="fas fa-eye"></i>
             </button>
 
-            <button title="Documento">
+            <button title="Documento" (click)="verDocumento(purchase)">
               <i class="fas fa-file-alt"></i>
             </button>
           </td>

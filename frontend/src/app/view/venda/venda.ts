@@ -6,6 +6,7 @@ import { OrderService } from '../../services/order';
 
 @Component({
   selector: 'app-venda',
+  standalone: true,
   imports: [CommonModule, Navbar, Menu],
   templateUrl: './venda.html',
   styleUrl: './venda.scss'
@@ -23,13 +24,28 @@ export class Venda implements OnInit {
   carregarVendas() {
     this.orderService.getOrders().subscribe({
       next: (data) => {
-        // Assume API returns { orders: [...] } based on api.js
         this.sales = data.orders || [];
       },
       error: (err) => {
         console.error('Erro ao carregar vendas:', err);
       }
     });
+  }
+
+  novaVenda() {
+    alert('Funcionalidade de Nova Venda em desenvolvimento (abrirá modal de seleção de produtos)');
+  }
+
+  filtrar() {
+    alert('Filtro de vendas clicado');
+  }
+
+  verDetalhes(sale: any) {
+    alert(`Detalhes da venda ${sale.id || sale._id}`);
+  }
+
+  verFatura(sale: any) {
+    alert(`Gerando fatura para a venda ${sale.id || sale._id}`);
   }
 
 }

@@ -4,10 +4,12 @@ import { DefaultLoginLayout } from '../../components/default-login-layout/defaul
 import { PrimaryInput } from '../../components/primary-input/primary-input';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  imports: [DefaultLoginLayout, ReactiveFormsModule, PrimaryInput],
+  standalone: true,
+  imports: [DefaultLoginLayout, ReactiveFormsModule, PrimaryInput, CommonModule],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })

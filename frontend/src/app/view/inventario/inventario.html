@@ -18,7 +18,7 @@
   <!-- Filtros -->
   <section class="inventory-filters">
     <input type="text" placeholder="Pesquisar produto..." />
-    
+
     <select>
       <option value="">Todos</option>
       <option value="low">Baixo estoque</option>
@@ -52,12 +52,8 @@
           <td>{{ product.quantity }}</td>
 
           <td>
-            <span 
-              class="status"
-              [class.low]="product.quantity < 5"
-              [class.ok]="product.quantity >= 5">
-              {{ product.quantity < 5 ? 'Baixo estoque' : 'Normal' }}
-            </span>
+            <span class="status" [class.low]="product.quantity < 5" [class.ok]="product.quantity >= 5">
+              {{ product.quantity < 5 ? 'Baixo estoque' : 'Normal' }} </span>
           </td>
 
           <td class="actions">
@@ -65,7 +61,7 @@
               <i class="fas fa-pen"></i>
             </button>
 
-            <button title="Entrada de estoque">
+            <button title="Entrada de estoque" (click)="estoqueEntrada(product)">
               <i class="fas fa-plus-circle"></i>
             </button>
           </td>
@@ -75,4 +71,3 @@
   </section>
 
 </div>
-

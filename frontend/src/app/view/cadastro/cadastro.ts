@@ -5,10 +5,12 @@ import { PrimaryInput } from '../../components/primary-input/primary-input';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-cadastro',
-  imports: [DefaultLoginLayout, PrimaryInput, ReactiveFormsModule],
+  standalone: true,
+  imports: [DefaultLoginLayout, PrimaryInput, ReactiveFormsModule, CommonModule],
   templateUrl: './cadastro.html'
 })
 export class Cadastro {

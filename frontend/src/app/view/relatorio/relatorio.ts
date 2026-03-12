@@ -6,13 +6,14 @@ import { Menu } from '../../components/menu/menu';
 
 @Component({
   selector: 'app-relatorio',
+  standalone: true,
   imports: [CommonModule, Navbar, Menu],
   templateUrl: './relatorio.html',
   styleUrl: './relatorio.scss'
 })
 export class Relatorio implements AfterViewInit {
 
- mostSold = [
+  mostSold = [
     { name: 'Camisa Social Masculina', quantity: 120 },
     { name: 'T-shirt Básica', quantity: 95 },
     { name: 'Calça Jeans Feminina', quantity: 75 }

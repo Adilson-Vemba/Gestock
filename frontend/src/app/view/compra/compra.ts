@@ -5,6 +5,7 @@ import { Menu } from '../../components/menu/menu';
 
 @Component({
   selector: 'app-compra',
+  standalone: true,
   imports: [CommonModule, Navbar, Menu],
   templateUrl: './compra.html',
   styleUrl: './compra.scss'
@@ -40,5 +41,17 @@ export class Compra {
       status: 'Recebido'
     }
   ];
+
+  novaCompra() {
+    alert('Funcionalidade de Nova Compra em desenvolvimento');
+  }
+
+  verDetalhes(purchase: any) {
+    alert(`Detalhes da compra ${purchase.id}`);
+  }
+
+  verDocumento(purchase: any) {
+    alert(`Visualizando documento da compra ${purchase.id}`);
+  }
 
 }

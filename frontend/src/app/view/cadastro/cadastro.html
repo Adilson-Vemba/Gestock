@@ -1,38 +1,14 @@
-<app-default-login-layout
-  title="Crie sua conta"
-  primarybtnText="Cadastrar"
-  secondarybtnText="Já tenho conta"
-  (submit)="submit()"
-  (secondaryAction)="irParaLogin()"
->
+<app-default-login-layout title="Crie sua conta" primarybtnText="Cadastrar" secondarybtnText="Já tenho conta"
+  (submit)="submit()" (secondaryAction)="irParaLogin()">
+
   <form [formGroup]="cadastroForm">
-
-    <app-primary-input
-      label="Nome"
-      formName="nome"
-      placeholder="Seu nome"
-    ></app-primary-input>
-
-    <app-primary-input
-      label="Email"
-      type="email"
-      formName="email"
-      placeholder="Seu email"
-    ></app-primary-input>
-
-    <app-primary-input
-      label="Senha"
-      type="password"
-      formName="senha"
-      placeholder="Senha"
-    ></app-primary-input>
-
-    <app-primary-input
-      label="Confirmar Senha"
-      type="password"
-      formName="confirmarSenha"
-      placeholder="Confirmar senha"
-    ></app-primary-input>
-
+    <app-primary-input label="Nome" formControlName="nome" inputName="nome" placeholder="Seu nome"></app-primary-input>
+    <app-primary-input label="Email" type="email" formControlName="email" inputName="email"
+      placeholder="Seu email"></app-primary-input>
+    <app-primary-input label="Senha" type="password" formControlName="senha" inputName="senha"
+      placeholder="Senha"></app-primary-input>
+    <app-primary-input label="Confirmar Senha" type="password" formControlName="confirmarSenha"
+      inputName="confirmarSenha" placeholder="Confirmar senha"></app-primary-input>
   </form>
+
 </app-default-login-layout>
