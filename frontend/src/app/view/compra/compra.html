@@ -33,44 +33,43 @@
     </div>
   </section>
 
-  <!-- Tabela -->
-  <section class="purchases-table">
+  <!-- Tabela de Compras -->
+  <section class="purchases-list">
     <table>
       <thead>
         <tr>
-          <th>#</th>
+          <th>ID</th>
           <th>Data</th>
           <th>Fornecedor</th>
-          <th>Produto</th>
-          <th>Quantidade</th>
-          <th>Valor</th>
+          <th>Produtos</th>
+          <th>Total (Estimado)</th>
           <th>Status</th>
-          <th>Ações</th>
+          <th>Ação</th>
         </tr>
       </thead>
-
       <tbody>
         <tr *ngFor="let purchase of purchases">
-          <td>{{ purchase.id }}</td>
-          <td>{{ purchase.date }}</td>
-          <td>{{ purchase.supplier }}</td>
-          <td>{{ purchase.product }}</td>
-          <td>{{ purchase.quantity }}</td>
-          <td>{{ purchase.total }} Kz</td>
-
+          <td>{{ purchase._id | slice: -5 }}</td>
+          <td>{{ purchase.createdAt | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ purchase.supplier?.name || 'N/A' }}</td>
           <td>
-            <span class="status" [class.received]="purchase.status === 'Recebido'"
-              [class.pending]="purchase.status === 'Pendente'">
+            <ul class="product-list-cell">
+              <li *ngFor="let item of purchase.products">
+                {{ item.product?.name }} (x{{ item.quantity }})
+              </li>
+            </ul>
+          </td>
+          <td>{{ purchase.total || 0 | number }} Kz</td>
+          <td>
+            <span class="status" [ngClass]="purchase.status?.toLowerCase()">
               {{ purchase.status }}
             </span>
           </td>
-
           <td class="actions">
-            <button title="Detalhes" (click)="verDetalhes(purchase)">
+            <button class="btn-icon" title="Ver Detalhes" (click)="verDetalhes(purchase)">
               <i class="fas fa-eye"></i>
             </button>
-
-            <button title="Documento" (click)="verDocumento(purchase)">
+            <button class="btn-icon" title="Ver Documento">
               <i class="fas fa-file-alt"></i>
             </button>
           </td>
@@ -78,5 +77,72 @@
       </tbody>
     </table>
   </section>
+
+  <!-- Modal Nova Compra -->
+  <div class="modal-overlay" *ngIf="showModal">
+    <div class="modal-card">
+      <header class="modal-header">
+        <h3>Solicitar Nova Compra</h3>
+        <button class="close-btn" (click)="fecharModal()">&times;</button>
+      </header>
+
+      <form [formGroup]="compraForm" (ngSubmit)="confirmarCompra()" class="modal-body">
+        <div class="form-group">
+          <label for="supplierId">Fornecedor</label>
+          <select id="supplierId" formControlName="supplierId">
+            <option value="">Selecione um fornecedor</option>
+            <option *ngFor="let s of suppliers" [value]="s._id">{{ s.name }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="productCode">Produto</label>
+          <select id="productCode" formControlName="productCode">
+            <option value="">Selecione um produto</option>
+            <option *ngFor="let p of products" [value]="p.code">{{ p.name }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="quantity">Quantidade</label>
+          <input type="number" id="quantity" formControlName="quantity" min="1">
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="fecharModal()">Cancelar</button>
+          <button type="submit" class="btn-primary" [disabled]="compraForm.invalid">Enviar Pedido</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Detalhes da Compra -->
+  <div class="modal-overlay" *ngIf="showDetailsModal">
+    <div class="modal-card">
+      <header class="modal-header">
+        <h3>Detalhes do Pedido de Compra</h3>
+        <button class="close-btn" (click)="fecharDetalhesModal()">&times;</button>
+      </header>
+
+      <div class="modal-body" *ngIf="selectedPurchase">
+        <p><strong>ID:</strong> {{ selectedPurchase._id }}</p>
+        <p><strong>Fornecedor:</strong> {{ selectedPurchase.supplier?.name }}</p>
+        <p><strong>Data:</strong> {{ selectedPurchase.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
+        <p><strong>Status:</strong> <span class="status" [ngClass]="selectedPurchase.status?.toLowerCase()">{{
+            selectedPurchase.status }}</span></p>
+
+        <h4 style="margin-top: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;">Produtos Solicitados</h4>
+        <ul style="list-style: none; padding: 0;">
+          <li *ngFor="let item of selectedPurchase.products" style="padding: 5px 0; border-bottom: 1px dashed #f1f1f1;">
+            {{ item.product?.name }} - {{ item.quantity }}x
+          </li>
+        </ul>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" (click)="fecharDetalhesModal()">Fechar</button>
+      </div>
+    </div>
+  </div>
 
 </div>

@@ -14,17 +14,17 @@
   <section class="reports-summary">
     <div class="summary-card">
       <span>Total de Vendas</span>
-      <strong>42</strong>
+      <strong>{{ statsData?.salesByMonth ? (statsData.salesByMonth | keyvalue)?.length : 0 }} meses registrados</strong>
     </div>
 
     <div class="summary-card">
       <span>Receita Total</span>
-      <strong>1 250 000 Kz</strong>
+      <strong>{{ statsData?.totalRevenue || 0 | number }} Kz</strong>
     </div>
 
     <div class="summary-card">
       <span>Total Compras</span>
-      <strong>620 000 Kz</strong>
+      <strong>{{ statsData?.totalSpent || 0 | number }} Kz</strong>
     </div>
   </section>
 
@@ -58,4 +58,3 @@
   </section>
 
 </div>
-

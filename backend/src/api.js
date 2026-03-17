@@ -395,6 +395,35 @@ app.get("/stats/graph", async (req, res) => {
         }
       },
       { $sort: { totalQuantity: -1 } },
+      { $limit: 5 },
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id",
+          foreignField: "_id",
+          as: "product"
+        }
+      },
+      { $unwind: "$product" },
+      {
+        $project: {
+          _id: "$product._id",
+          name: "$product.name",
+          totalQuantity: 1
+        }
+      }
+    ]);
+
+    const leastSold = await Order.aggregate([
+      { $unwind: "$products" },
+      {
+        $group: {
+          _id: "$products.product",
+          totalQuantity: { $sum: "$products.quantity" }
+        }
+      },
+      { $sort: { totalQuantity: 1 } },
+      { $limit: 5 },
       {
         $lookup: {
           from: "products",
@@ -434,6 +463,26 @@ app.get("/stats/graph", async (req, res) => {
       }
     ]);
 
+    const salesByMonth = await Order.aggregate([
+      { $unwind: "$products" },
+      {
+        $lookup: {
+          from: "products",
+          localField: "products.product",
+          foreignField: "_id",
+          as: "product"
+        }
+      },
+      { $unwind: "$product" },
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          revenue: { $sum: { $multiply: ["$products.quantity", "$product.price"] } }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
     const totalRevenue = sales[0]?.totalRevenue || 0;
 
     const purchases = await SupplierRequest.aggregate([
@@ -458,12 +507,48 @@ app.get("/stats/graph", async (req, res) => {
       }
     ]);
 
+    const purchasesByMonth = await SupplierRequest.aggregate([
+      { $match: { status: "ACEITE" } },
+      { $unwind: "$products" },
+      {
+        $lookup: {
+          from: "products",
+          localField: "products.product",
+          foreignField: "_id",
+          as: "product"
+        }
+      },
+      { $unwind: "$product" },
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          spent: { $sum: { $multiply: ["$products.quantity", "$product.price"] } }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
     const totalSpent = purchases[0]?.totalSpent || 0;
+
+    const inventoryDistribution = await Product.aggregate([
+      {
+        $project: {
+          name: 1,
+          quantity: 1
+        }
+      },
+      { $sort: { quantity: -1 } },
+      { $limit: 5 }
+    ]);
 
     res.json({
       topProducts,
+      leastSold,
       totalRevenue,
-      totalSpent
+      totalSpent,
+      salesByMonth,
+      purchasesByMonth,
+      inventoryDistribution
     });
 
   } catch (error) {
@@ -471,6 +556,7 @@ app.get("/stats/graph", async (req, res) => {
     res.status(500).json({ error });
   }
 });
+
 
 const port = process.env.PORT || 8080;
 

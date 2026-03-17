@@ -40,45 +40,100 @@
     </div>
   </section>
 
-  <!-- Tabela de vendas -->
-  <section class="sales-table">
+  <!-- Tabela de Vendas -->
+  <section class="sales-list">
     <table>
       <thead>
         <tr>
-          <th>#</th>
+          <th>ID</th>
           <th>Data</th>
-          <th>Cliente</th>
+          <th>Produtos</th>
           <th>Total</th>
-          <th>Status</th>
-          <th>Ações</th>
+          <th>Vendedor</th>
+          <th>Ação</th>
         </tr>
       </thead>
-
       <tbody>
         <tr *ngFor="let sale of sales">
-          <td>{{ sale.id }}</td>
-          <td>{{ sale.date }}</td>
-          <td>{{ sale.customer }}</td>
-          <td>{{ sale.total }} Kz</td>
-
+          <td>{{ sale.id || sale._id | slice: -5 }}</td>
+          <td>{{ sale.createdAt | date: 'dd/MM/yyyy' }}</td>
           <td>
-            <span class="status" [class.paid]="sale.status === 'Paga'" [class.pending]="sale.status === 'Pendente'">
-              {{ sale.status }}
-            </span>
+            <ul class="product-list-cell">
+              <li *ngFor="let item of sale.products">
+                {{ item.product?.name }} (x{{ item.quantity }})
+              </li>
+            </ul>
           </td>
-
+          <td>{{ sale.total || 0 | number }} Kz</td>
+          <td>{{ sale.seller || 'Admin' }}</td>
           <td class="actions">
-            <button title="Ver detalhes" (click)="verDetalhes(sale)">
+            <button class="btn-icon" title="Ver Detalhes" (click)="verDetalhes(sale)">
               <i class="fas fa-eye"></i>
             </button>
-
-            <button title="Fatura" (click)="verFatura(sale)">
-              <i class="fas fa-file-invoice"></i>
+            <button class="btn-icon" title="Ver Fatura" (click)="verFatura(sale)">
+              <i class="fas fa-file-invoice-dollar"></i>
             </button>
           </td>
         </tr>
       </tbody>
     </table>
   </section>
+
+  <!-- Modal Nova Venda -->
+  <div class="modal-overlay" *ngIf="showModal">
+    <div class="modal-card">
+      <header class="modal-header">
+        <h3>Nova Venda</h3>
+        <button class="close-btn" (click)="fecharModal()">&times;</button>
+      </header>
+
+      <form [formGroup]="vendaForm" (ngSubmit)="confirmarVenda()" class="modal-body">
+        <div class="form-group">
+          <label for="productCode">Produto</label>
+          <select id="productCode" formControlName="productCode">
+            <option value="">Selecione um produto</option>
+            <option *ngFor="let p of products" [value]="p.code">{{ p.name }} (Estoque: {{ p.quantity }})</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="quantity">Quantidade</label>
+          <input type="number" id="quantity" formControlName="quantity" min="1">
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="fecharModal()">Cancelar</button>
+          <button type="submit" class="btn-primary" [disabled]="vendaForm.invalid">Confirmar Venda</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Detalhes da Venda -->
+  <div class="modal-overlay" *ngIf="showDetailsModal">
+    <div class="modal-card">
+      <header class="modal-header">
+        <h3>Detalhes da Venda</h3>
+        <button class="close-btn" (click)="fecharDetalhesModal()">&times;</button>
+      </header>
+
+      <div class="modal-body" *ngIf="selectedSale">
+        <p><strong>ID:</strong> {{ selectedSale.id || selectedSale._id }}</p>
+        <p><strong>Data:</strong> {{ selectedSale.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
+        <p><strong>Total:</strong> {{ selectedSale.total || 0 | number }} Kz</p>
+
+        <h4 style="margin-top: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;">Produtos</h4>
+        <ul style="list-style: none; padding: 0;">
+          <li *ngFor="let item of selectedSale.products" style="padding: 5px 0; border-bottom: 1px dashed #f1f1f1;">
+            {{ item.product?.name }} - {{ item.quantity }}x
+          </li>
+        </ul>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" (click)="fecharDetalhesModal()">Fechar</button>
+      </div>
+    </div>
+  </div>
 
 </div>

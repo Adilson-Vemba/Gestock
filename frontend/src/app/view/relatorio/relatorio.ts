@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component } from '@angular/core';
+import { OnInit, Component } from '@angular/core';
 import { Chart } from 'chart.js/auto';
 import { Navbar } from '../../components/navbar/navbar';
 import { Menu } from '../../components/menu/menu';
+import { StatsService } from '../../services/stats';
 
 @Component({
   selector: 'app-relatorio',
@@ -11,34 +12,70 @@ import { Menu } from '../../components/menu/menu';
   templateUrl: './relatorio.html',
   styleUrl: './relatorio.scss'
 })
-export class Relatorio implements AfterViewInit {
+export class Relatorio implements OnInit {
 
-  mostSold = [
-    { name: 'Camisa Social Masculina', quantity: 120 },
-    { name: 'T-shirt Básica', quantity: 95 },
-    { name: 'Calça Jeans Feminina', quantity: 75 }
-  ];
+  mostSold: any[] = [];
+  leastSold: any[] = [];
+  statsData: any = null;
 
-  leastSold = [
-    { name: 'Chapéu de Praia', quantity: 5 },
-    { name: 'Meias Esportivas', quantity: 8 },
-    { name: 'Cinto de Couro', quantity: 10 }
-  ];
+  constructor(private statsService: StatsService) { }
 
-  ngAfterViewInit(): void {
-    this.createSalesChart();
-    this.createPurchasesChart();
+  ngOnInit(): void {
+    this.carregarEstatisticas();
   }
 
-  createSalesChart() {
+  carregarEstatisticas(): void {
+    this.statsService.getGraphStats().subscribe({
+      next: (data) => {
+        this.statsData = data;
+        this.mostSold = data.topProducts || [];
+        this.leastSold = data.leastSold || [];
+        this.carregarGraficos();
+      },
+      error: (err) => console.error('Erro ao carregar estatísticas:', err)
+    });
+  }
+
+  carregarGraficos() {
+    if (!this.statsData) return;
+
+    // Processar vendas por mês
+    const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+
+    // Preparar dados de vendas
+    const vendasPorMes = new Array(12).fill(0);
+    if (this.statsData.salesByMonth) {
+      this.statsData.salesByMonth.forEach((item: any) => {
+        if (item._id >= 1 && item._id <= 12) {
+          vendasPorMes[item._id - 1] = item.revenue;
+        }
+      });
+    }
+
+    // Preparar dados de compras
+    const comprasPorMes = new Array(12).fill(0);
+    if (this.statsData.purchasesByMonth) {
+      this.statsData.purchasesByMonth.forEach((item: any) => {
+        if (item._id >= 1 && item._id <= 12) {
+          comprasPorMes[item._id - 1] = item.spent;
+        }
+      });
+    }
+
+    this.createSalesChart(meses, vendasPorMes);
+    this.createPurchasesChart(meses, comprasPorMes);
+  }
+
+  createSalesChart(labels: string[] = [], data: number[] = []) {
     const ctx = document.getElementById('salesChart') as HTMLCanvasElement;
+    if (!ctx) return;
     new Chart(ctx, {
       type: 'line',
       data: {
-        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+        labels: labels,
         datasets: [{
           label: 'Vendas (Kz)',
-          data: [45000, 78000, 32000, 91000, 50000, 67000],
+          data: data,
           borderColor: '#3498db;',
           backgroundColor: 'rgba(0,209,178,0.2)',
           fill: true,
@@ -49,15 +86,16 @@ export class Relatorio implements AfterViewInit {
     });
   }
 
-  createPurchasesChart() {
+  createPurchasesChart(labels: string[] = [], data: number[] = []) {
     const ctx = document.getElementById('purchasesChart') as HTMLCanvasElement;
+    if (!ctx) return;
     new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+        labels: labels,
         datasets: [{
           label: 'Compras (Kz)',
-          data: [25000, 40000, 38000, 45000, 30000, 50000],
+          data: data,
           backgroundColor: '#f39c12'
         }]
       },
