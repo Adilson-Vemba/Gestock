@@ -95,4 +95,9 @@ export class Compra implements OnInit {
     });
   }
 
+  verDetalhes(purchase: any) {
+    this.selectedPurchase = purchase;
+    this.showDetailsModal = true;
+  }
+
 }
