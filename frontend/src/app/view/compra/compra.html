@@ -9,27 +9,58 @@
       <h2>Compras aos Fornecedores</h2>
     </div>
 
-    <button class="btn-primary" (click)="novaCompra()">
-      <i class="fas fa-plus"></i>
-      Nova Compra
-    </button>
+    <div class="header-actions">
+      <button class="btn-secondary" (click)="toggleSupplierPanel()">
+        <i class="fas fa-store"></i>
+        Fornecedores
+      </button>
+      <button class="btn-primary" (click)="novaCompra()">
+        <i class="fas fa-plus"></i>
+        Nova Compra
+      </button>
+    </div>
   </header>
+
+  <!-- Painel de Gestão de Fornecedores -->
+  <section class="supplier-panel" *ngIf="showSupplierListPanel">
+    <div class="supplier-panel-header">
+      <h3><i class="fas fa-store"></i> Fornecedores Cadastrados</h3>
+      <button class="btn-primary small" (click)="abrirModalNovoFornecedor()">
+        <i class="fas fa-plus"></i> Novo Fornecedor
+      </button>
+    </div>
+
+    <div class="supplier-empty" *ngIf="suppliers.length === 0">
+      <i class="fas fa-box-open"></i>
+      <p>Nenhum fornecedor cadastrado. Adicione o primeiro acima.</p>
+    </div>
+
+    <div class="supplier-grid" *ngIf="suppliers.length > 0">
+      <div class="supplier-card" *ngFor="let s of suppliers">
+        <div class="supplier-card-info">
+          <strong>{{ s.name }}</strong>
+          <span>{{ s.description || 'Sem descrição' }}</span>
+        </div>
+        <button class="btn-danger-icon" title="Eliminar" (click)="eliminarFornecedor(s._id)">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>
+  </section>
 
   <!-- Resumo -->
   <section class="purchases-summary">
     <div class="summary-card">
       <span>Total de Compras</span>
-      <strong>9</strong>
+      <strong>{{ purchases.length }}</strong>
     </div>
-
     <div class="summary-card">
-      <span>Valor Total</span>
-      <strong>680 000 Kz</strong>
+      <span>Fornecedores</span>
+      <strong>{{ suppliers.length }}</strong>
     </div>
-
     <div class="summary-card">
-      <span>Este Mês</span>
-      <strong>210 000 Kz</strong>
+      <span>Pedidos Pendentes</span>
+      <strong>{{ pendingCount }}</strong>
     </div>
   </section>
 
@@ -42,24 +73,22 @@
           <th>Data</th>
           <th>Fornecedor</th>
           <th>Produtos</th>
-          <th>Total (Estimado)</th>
           <th>Status</th>
           <th>Ação</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let purchase of purchases">
-          <td>{{ purchase._id | slice: -5 }}</td>
+          <td class="id-cell">{{ purchase._id | slice: -6 }}</td>
           <td>{{ purchase.createdAt | date: 'dd/MM/yyyy' }}</td>
           <td>{{ purchase.supplier?.name || 'N/A' }}</td>
           <td>
             <ul class="product-list-cell">
               <li *ngFor="let item of purchase.products">
-                {{ item.product?.name }} (x{{ item.quantity }})
+                {{ item.product?.name || item.code }} (x{{ item.quantity }})
               </li>
             </ul>
           </td>
-          <td>{{ purchase.total || 0 | number }} Kz</td>
           <td>
             <span class="status" [ngClass]="purchase.status?.toLowerCase()">
               {{ purchase.status }}
@@ -69,10 +98,10 @@
             <button class="btn-icon" title="Ver Detalhes" (click)="verDetalhes(purchase)">
               <i class="fas fa-eye"></i>
             </button>
-            <button class="btn-icon" title="Ver Documento">
-              <i class="fas fa-file-alt"></i>
-            </button>
           </td>
+        </tr>
+        <tr *ngIf="purchases.length === 0">
+          <td colspan="6" class="empty-row">Nenhuma compra registada. Clique em "Nova Compra" para começar.</td>
         </tr>
       </tbody>
     </table>
@@ -93,6 +122,9 @@
             <option value="">Selecione um fornecedor</option>
             <option *ngFor="let s of suppliers" [value]="s._id">{{ s.name }}</option>
           </select>
+          <small *ngIf="suppliers.length === 0" class="hint-text">
+            <i class="fas fa-info-circle"></i> Não há fornecedores. Adicione um primeiro em "Fornecedores".
+          </small>
         </div>
 
         <div class="form-group">
@@ -116,6 +148,33 @@
     </div>
   </div>
 
+  <!-- Modal Novo Fornecedor -->
+  <div class="modal-overlay" *ngIf="showSupplierModal">
+    <div class="modal-card">
+      <header class="modal-header">
+        <h3>Novo Fornecedor</h3>
+        <button class="close-btn" (click)="fecharModalFornecedor()">&times;</button>
+      </header>
+
+      <form [formGroup]="supplierForm" (ngSubmit)="confirmarNovoFornecedor()" class="modal-body">
+        <div class="form-group">
+          <label for="supplierName">Nome *</label>
+          <input type="text" id="supplierName" formControlName="name" placeholder="Ex: Empresa ABC">
+        </div>
+
+        <div class="form-group">
+          <label for="supplierDesc">Descrição</label>
+          <input type="text" id="supplierDesc" formControlName="description" placeholder="Ex: Fornecedor de materiais">
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="fecharModalFornecedor()">Cancelar</button>
+          <button type="submit" class="btn-primary" [disabled]="supplierForm.invalid">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Modal Detalhes da Compra -->
   <div class="modal-overlay" *ngIf="showDetailsModal">
     <div class="modal-card">
@@ -128,13 +187,14 @@
         <p><strong>ID:</strong> {{ selectedPurchase._id }}</p>
         <p><strong>Fornecedor:</strong> {{ selectedPurchase.supplier?.name }}</p>
         <p><strong>Data:</strong> {{ selectedPurchase.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
-        <p><strong>Status:</strong> <span class="status" [ngClass]="selectedPurchase.status?.toLowerCase()">{{
-            selectedPurchase.status }}</span></p>
+        <p><strong>Status:</strong>
+          <span class="status" [ngClass]="selectedPurchase.status?.toLowerCase()">{{ selectedPurchase.status }}</span>
+        </p>
 
-        <h4 style="margin-top: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;">Produtos Solicitados</h4>
+        <h4 style="margin-top: 12px; border-bottom: 1px solid #eee; padding-bottom: 5px;">Produtos Solicitados</h4>
         <ul style="list-style: none; padding: 0;">
-          <li *ngFor="let item of selectedPurchase.products" style="padding: 5px 0; border-bottom: 1px dashed #f1f1f1;">
-            {{ item.product?.name }} - {{ item.quantity }}x
+          <li *ngFor="let item of selectedPurchase.products" style="padding: 6px 0; border-bottom: 1px dashed #f1f1f1;">
+            {{ item.product?.name || item.code }} — {{ item.quantity }}x
           </li>
         </ul>
       </div>

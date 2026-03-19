@@ -83,7 +83,7 @@
     background-color: #fff;
     border-radius: 12px;
     padding: 1rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 
     span {
       font-size: 0.75rem;
@@ -97,11 +97,12 @@
 }
 
 /* Tabela */
-.sales-table {
+.sales-table,
+.sales-list {
   background-color: #fff;
   border-radius: 12px;
   padding: 1rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 
   table {
     width: 100%;
@@ -111,13 +112,20 @@
       font-size: 0.8rem;
       color: #666;
       text-align: left;
-      padding-bottom: 0.7rem;
+      padding: 0.7rem 1rem;
+      border-bottom: 2px solid #eee;
+      white-space: nowrap;
     }
 
     td {
-      padding: 0.8rem 0;
+      padding: 0.85rem 1rem;
       border-top: 1px solid #eee;
       font-size: 0.85rem;
+      vertical-align: top;
+    }
+
+    tr:hover td {
+      background-color: #fafafa;
     }
   }
 }
@@ -153,103 +161,109 @@
     color: #555;
 
     &.btn-icon {
-        padding: 4px;
-        border-radius: 4px;
-        &:hover {
-            background: #eee;
-            color: #3498db;
-        }
+      padding: 4px;
+      border-radius: 4px;
+
+      &:hover {
+        background: #eee;
+        color: #3498db;
+      }
     }
   }
 }
 
 .product-list-cell {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    font-size: 0.8rem;
-    color: #444;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.8rem;
+  color: #444;
 }
 
 /* Modal */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
 .modal-card {
-    background: #fff;
-    width: 400px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    overflow: hidden;
+  background: #fff;
+  width: 400px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .modal-header {
-    padding: 1rem 1.5rem;
-    background: #f8f9fa;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  padding: 1rem 1.5rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-    h3 {
-        margin: 0;
-        font-size: 1.1rem;
-        color: #333;
-    }
+  h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+  }
 
-    .close-btn {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: #999;
-        &:hover { color: #333; }
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+
+    &:hover {
+      color: #333;
     }
+  }
 }
 
 .modal-body {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 
-    label {
-        font-size: 0.85rem;
-        font-weight: 500;
-        color: #555;
-    }
+  label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #555;
+  }
 
-    input, select {
-        padding: 0.6rem;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        font-size: 0.9rem;
-        &:focus {
-            outline: none;
-            border-color: #3498db;
-        }
+  input,
+  select {
+    padding: 0.6rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9rem;
+
+    &:focus {
+      outline: none;
+      border-color: #3498db;
     }
+  }
 }
 
 .modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.7rem;
-    margin-top: 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.7rem;
+  margin-top: 0.5rem;
 }

@@ -1,4 +1,5 @@
 import { Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Navbar } from '../../components/navbar/navbar';
 import { Menu } from '../../components/menu/menu';
 import { Chart } from 'chart.js/auto';
@@ -11,7 +12,7 @@ import { StatsService } from '../../services/stats';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [Navbar, Menu, CommonModule],
+  imports: [Navbar, Menu, CommonModule, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })

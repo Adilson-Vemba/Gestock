@@ -1,13 +1,10 @@
-
-
-
 .content-container {
   display: flex;
-  justify-content: center;  // Centraliza na horizontal
-  align-items: center;      // Centraliza na vertical
+  justify-content: center; // Centraliza na horizontal
+  align-items: center; // Centraliza na vertical
   min-height: calc(100vh - 300px);
   padding: 20px;
-  
+
 
   .message {
     max-width: 1000px;
@@ -25,7 +22,7 @@
       height: 230px;
     }
 
-   
+
     border: #b6bdbc 0.5px solid;
   }
 }
@@ -52,8 +49,8 @@
 
 .titulo {
 
-    display: flex;
-    flex-direction: flex;
+  display: flex;
+  flex-direction: flex;
   text-align: center;
   color: white;
   font-weight: bold;
@@ -68,17 +65,39 @@
   li {
     background: #f0f4f8;
     margin: 8px 0;
-    padding: 10px;
+    padding: 0;
     border-radius: 0px;
     font-weight: 300;
     transition: all 0.2s ease;
     cursor: pointer;
 
+    a {
+      display: block;
+      padding: 10px;
+      color: inherit;
+      text-decoration: none;
+      width: 100%;
+
+      i {
+        margin-right: 6px;
+        font-size: 0.85rem;
+        opacity: 0.7;
+      }
+    }
+
     &:hover {
-      background: #e3e5e7; // cor padrão do Bulma is-info
-      color: black;
+      background: #dde4ea;
+      color: #2980b9;
       transform: translateY(-2px);
       box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+
+      a {
+        color: #2980b9;
+      }
+
+      i {
+        opacity: 1;
+      }
     }
   }
 }
@@ -86,7 +105,7 @@
 //relatório
 
 .relatorio-header {
-  
+
   margin-top: 30px;
   padding: 10px;
   border-radius: 5px 5px 0 0;

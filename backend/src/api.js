@@ -283,6 +283,19 @@ app.patch("/suppliers/:id", async (req, res) => {
   }
 })
 
+app.delete("/suppliers/:id", async (req, res) => {
+  try {
+    const { id } = req.params
+    const supplier = await Supplier.findByIdAndDelete(id)
+    if (!supplier) {
+      return res.status(404).json({ error: "Fornecedor não encontrado" })
+    }
+    res.json({ message: "Fornecedor eliminado com sucesso" })
+  } catch (error) {
+    res.status(500).json({ error })
+  }
+})
+
 app.post("/suppliers/:id/request", async (req, res) => {
   try {
     const { id } = req.params

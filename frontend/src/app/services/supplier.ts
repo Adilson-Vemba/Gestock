@@ -18,6 +18,10 @@ export class SupplierService {
         return this.http.post<any>(this.API_URL, supplier);
     }
 
+    deleteSupplier(id: string): Observable<any> {
+        return this.http.delete<any>(`${this.API_URL}/${id}`);
+    }
+
     createRequest(supplierId: string, products: any[]): Observable<any> {
         return this.http.post<any>(`${this.API_URL}/${supplierId}/request`, { products });
     }
