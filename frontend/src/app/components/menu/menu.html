@@ -2,33 +2,32 @@
 <aside class="menu-sidebar">
   <ul class="menu-list">
     <li>
-      <a routerLink="/admin" routerLinkActive="is-active" [routerLinkActiveOptions]="{exact: true}">
+      <a routerLink="/admin" routerLinkActive="is-active" [routerLinkActiveOptions]="{exact: true}" title="Dashboard Administrativo">
         <span class="icon"><i class="fas fa-home"></i></span>
       </a>
     </li>
     <li>
-      <a routerLink="/admin/compra" routerLinkActive="is-active">
+      <a routerLink="/admin/compra" routerLinkActive="is-active" title="Gestão de Compras e Fornecedores">
         <span class="icon"><i class="fas fa-truck-loading"></i></span>
       </a>
     </li>
     <li>
-      <a routerLink="/admin/venda" routerLinkActive="is-active">
+      <a routerLink="/admin/venda" routerLinkActive="is-active" title="Ponto de Venda e Facturação">
         <span class="icon"><i class="fas fa-dollar-sign"></i></span>
       </a>
     </li>
     <li>
-      <a routerLink="/admin/inventario" routerLinkActive="is-active">
+      <a routerLink="/admin/inventario" routerLinkActive="is-active" title="Controle de Stock e Produtos">
         <span class="icon"><i class="fas fa-boxes"></i></span>
       </a>
     </li>
     <li>
-      <a routerLink="/admin/relatorio" routerLinkActive="is-active">
+      <a routerLink="/admin/relatorio" routerLinkActive="is-active" title="Relatórios e Estatísticas">
         <span class="icon"><i class="fas fa-chart-line"></i></span>
       </a>
     </li>
-    <!-- Link extra para ir para a loja -->
-    <li style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
-      <a routerLink="/" title="Ver Loja">
+    <li class="mt-auto">
+      <a routerLink="/dashboard" title="Ver Loja (Visão do Cliente)" class="store-link">
         <span class="icon"><i class="fas fa-store"></i></span>
       </a>
     </li>

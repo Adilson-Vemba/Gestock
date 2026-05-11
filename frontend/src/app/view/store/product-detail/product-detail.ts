@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ProductService } from '../../../services/product';
 import { CartService, CartItem } from '../../../services/cart.service';
+import { AuthService } from '../../../services/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-detail',
@@ -19,7 +21,9 @@ export class ProductDetail implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
-    private cartService: CartService
+    private cartService: CartService,
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -48,6 +52,12 @@ export class ProductDetail implements OnInit {
   }
 
   addToCart() {
+    if (!this.authService.isLoggedIn()) {
+      alert('Por favor, faça login para realizar compras.');
+      this.router.navigate(['/login']);
+      return;
+    }
+    
     if (!this.product) return;
     const item: CartItem = {
       productId: this.product._id,

@@ -19,7 +19,7 @@ import { authGuard, adminGuard } from './guards/auth.guard';
 export const routes: Routes = [
   // Storefront (Public)
   { path: '', component: StoreHome },
-  { path: 'carrinho', component: Cart },
+  { path: 'carrinho', component: Cart, canActivate: [authGuard] },
   { path: 'produto/:code', component: ProductDetail },
   { path: 'login', component: Login },
   { path: 'cadastro', component: Cadastro },

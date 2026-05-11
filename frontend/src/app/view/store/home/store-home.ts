@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ProductService } from '../../../services/product';
 import { CartService, CartItem } from '../../../services/cart.service';
 import { AuthService } from '../../../services/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-store-home',
@@ -16,6 +17,7 @@ export class StoreHome implements OnInit {
   private productService = inject(ProductService);
   private cartService = inject(CartService);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   products: any[] = [];
   topSellers: any[] = [];
@@ -37,6 +39,15 @@ export class StoreHome implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    // Se o usuário já estiver logado, redireciona para o painel correto
+    if (this.isLoggedIn) {
+      if (this.isAdmin) {
+        this.router.navigate(['/admin']);
+      } else {
+        this.router.navigate(['/dashboard']);
+      }
+      return;
+    }
     this.loadProducts();
   }
 
@@ -54,6 +65,12 @@ export class StoreHome implements OnInit {
   }
 
   addToCart(product: any) {
+    if (!this.isLoggedIn) {
+      alert('Por favor, faça login para realizar compras.');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     const item: CartItem = {
       productId: product._id,
       code: product.code,
