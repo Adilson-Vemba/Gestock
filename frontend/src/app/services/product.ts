@@ -14,6 +14,10 @@ export class ProductService {
         return this.http.get<any[]>(this.API_URL);
     }
 
+    getTopSellers(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.API_URL}/top-sellers`);
+    }
+
     getProduct(code: string): Observable<any> {
         return this.http.get<any>(`${this.API_URL}/${code}`);
     }

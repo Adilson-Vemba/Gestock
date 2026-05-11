@@ -35,9 +35,12 @@ export class Login {
 
     this.authService.login(this.loginForm.value as any)
       .subscribe({
-        next: (res) => {
-          localStorage.setItem('token', res.token);
-          this.router.navigate(['/inventario']);
+        next: () => {
+          if (this.authService.isAdmin()) {
+            this.router.navigate(['/admin']);
+          } else {
+            this.router.navigate(['/dashboard']);
+          }
         },
         error: () => {
           alert('Email ou senha inválidos');

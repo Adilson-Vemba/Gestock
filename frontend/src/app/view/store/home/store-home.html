@@ -1,14 +1,15 @@
 <div class="store-container">
   <!-- Navbar -->
-  <nav class="store-navbar glass-panel">
+<nav class="store-navbar glass-panel">
     <div class="container d-flex justify-content-between align-items-center">
       <a routerLink="/" class="navbar-brand">
         <img src="/images/Logo.svg" alt="Gestock Logo" height="40">
       </a>
       <div class="nav-links d-flex align-items-center">
-        <a routerLink="/" class="nav-item">Explorar</a>
-        <a routerLink="/login" class="nav-item">Entrar</a>
-        <a routerLink="/admin" class="nav-item d-none d-md-inline">Painel Admin</a>
+        <a routerLink="/" class="nav-item">Início</a>
+        <a *ngIf="!isLoggedIn" routerLink="/login" class="nav-item">Entrar</a>
+        <a *ngIf="isLoggedIn && isAdmin" routerLink="/admin" class="nav-item d-none d-md-inline">Painel Admin</a>
+        <a *ngIf="isLoggedIn && isClient" routerLink="/dashboard" class="nav-item">Meu Painel</a>
         <a routerLink="/carrinho" class="cart-link ms-3">
           <i class="fas fa-shopping-basket"></i>
           <span class="badge rounded-pill" *ngIf="(cartItems$ | async)?.length">{{ (cartItems$ | async)?.length }}</span>
@@ -112,29 +113,28 @@
     </div>
   </section>
 
-  <!-- Catalog Section -->
-  <main id="catalog" class="container py-6">
-    <div class="d-flex justify-content-between align-items-end mb-5">
-      <div>
-        <h2 class="h1 fw-bold mb-2">Catálogo de Produtos</h2>
-        <p class="text-muted">Encontre as melhores ofertas selecionadas para você.</p>
-      </div>
+  <!-- Top Sellers Section -->
+  <main id="top-sellers" class="container py-6">
+    <div class="text-center mb-5">
+      <h2 class="h1 fw-bold mb-2">Produtos Mais Vendidos</h2>
+      <p class="text-muted">Confira o que há de melhor e mais procurado na nossa plataforma.</p>
     </div>
 
     <div *ngIf="loading" class="text-center py-5">
       <div class="spinner-grow text-primary" role="status"></div>
-      <p class="mt-3 text-muted">Preparando vitrine...</p>
+      <p class="mt-3 text-muted">A carregar destaques...</p>
     </div>
 
-    <div *ngIf="!loading && products.length === 0" class="text-center py-5 box">
-      <i class="fas fa-search fa-3x text-muted mb-3 opacity-25"></i>
-      <p class="h5 text-muted">Nenhum produto disponível no momento.</p>
+    <div *ngIf="!loading && topSellers.length === 0" class="text-center py-5 box">
+      <i class="fas fa-star fa-3x text-muted mb-3 opacity-25"></i>
+      <p class="h5 text-muted">Ainda não temos destaques para mostrar.</p>
     </div>
 
-    <div class="row g-4" *ngIf="!loading">
-      <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let product of products">
-        <div class="product-card box border-0 hover-lift">
+    <div class="row g-4 justify-content-center" *ngIf="!loading">
+      <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let product of topSellers">
+        <div class="product-card box border-0 hover-lift shadow-sm">
           <div class="product-image">
+            <div class="top-tag">Top Seller</div>
             <img [src]="product.photo ? 'http://localhost:8080/' + product.photo : 'https://placehold.co/600x400/f8fafc/6366f1?text=Produto'" [alt]="product.name">
           </div>
           <div class="product-info p-4">
@@ -142,15 +142,16 @@
             <p class="product-price h5 text-primary fw-bold mb-3">{{ product.price | currency:'MZN' }}</p>
             <div class="d-flex gap-2">
               <button class="btn btn-primary flex-grow-1 rounded-pill" (click)="addToCart(product)">
-                <i class="fas fa-cart-plus me-1"></i> Adicionar
-              </button>
-              <button class="btn btn-light btn-icon rounded-circle" [routerLink]="['/produto', product.code]" title="Ver detalhes">
-                <i class="fas fa-eye text-primary"></i>
+                <i class="fas fa-cart-plus me-1"></i> Comprar
               </button>
             </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="text-center mt-5">
+      <a routerLink="/login" class="btn btn-outline-primary px-5 py-3 rounded-pill">Ver Todo o Catálogo</a>
     </div>
   </main>
 

@@ -1,27 +1,62 @@
-<main>
-  <section class="main-section">
-    <h1>{{ title }}</h1>
-    <img src="/images/main-ilustration.svg" alt="Illustration"/>
-  </section>
+<div class="auth-wrapper">
+  <!-- Lado esquerdo – Decorativo -->
+  <div class="auth-left">
+    <div class="auth-left-content">
+      <div class="logo-wrap">
+        <img src="/images/Logo.svg" alt="Gestock">
+      </div>
+      <h1>{{ title }}</h1>
+      <p>A plataforma que une e-commerce e gestão de stock numa só solução premium.</p>
 
-  <section class="form-section">
-    <img src="/images/Logo.svg" alt="Gestock Logo"/>
-    
-    <div class="form-container" style="width: 100%; max-width: 400px; display: flex; flex-direction: column; align-items: center;">
-      <ng-content></ng-content>
+      <div class="feature-list">
+        <div class="feature-item">
+          <span class="feature-icon"><i class="fas fa-shield-alt"></i></span>
+          <span>100% Seguro e Protegido</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon"><i class="fas fa-bolt"></i></span>
+          <span>Acesso Instantâneo</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon"><i class="fas fa-chart-line"></i></span>
+          <span>Relatórios em Tempo Real</span>
+        </div>
+      </div>
+    </div>
 
-      <button class="btn-primary" (click)="submit()">{{ primarybtnText }}</button>
+    <!-- Bolhas decorativas -->
+    <div class="bubble bubble-1"></div>
+    <div class="bubble bubble-2"></div>
+    <div class="bubble bubble-3"></div>
+  </div>
 
-      <div class="divider">
-        <div></div>
-        <span>ou</span>
-        <div></div>
+  <!-- Lado direito – Formulário -->
+  <div class="auth-right">
+    <div class="auth-card">
+      <div class="auth-card-header">
+        <img src="/images/Logo.svg" alt="Gestock" class="mobile-logo">
+        <h2>{{ title }}</h2>
+        <p class="subtitle">Bem-vindo de volta ao Gestock</p>
       </div>
 
-      <button class="btn-secondary" (click)="secondaryClick()">
-        {{ secondarybtnText }}
-      </button>
-    </div>
-  </section>
-</main>
+      <div class="form-body">
+        <ng-content></ng-content>
+      </div>
 
+      <div class="form-actions">
+        <button class="btn-primary-auth" (click)="submit()">
+          <span>{{ primarybtnText }}</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+
+        <div class="divider-line">
+          <span>ou</span>
+        </div>
+
+        <button class="btn-secondary-auth" (click)="secondaryClick()">
+          {{ secondarybtnText }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

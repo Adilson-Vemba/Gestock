@@ -103,6 +103,16 @@ app.post("/products", upload.single("photo"), async (req, res) => {
   }
 })
 
+// GET /products/top-sellers - Returns most relevant products for the home page
+app.get("/products/top-sellers", async (req, res) => {
+  try {
+    const products = await Product.find().sort({ quantity: -1 }).limit(4);
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: String(error) });
+  }
+});
+
 
 // Admin guard middleware (real implementation)
 const adminGuard = (req, res, next) => {
