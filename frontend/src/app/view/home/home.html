@@ -1,162 +1,78 @@
 <app-navbar></app-navbar>
 <app-menu></app-menu>
-<div class="content-container">
-    <article class="message">
 
-        <!-- Cabeçalho -->
-        <div class="message-header">
-            <i class="fa-solid fa-dollar-sign"></i>
-            <p>CONTROLE O FLUXO DA SUA MERCADORIA</p>
-            <i class="fa-solid fa-dollar-sign"></i>
+<div class="main-content">
+  <div class="dashboard-container container-fluid">
+    <div class="welcome-header mb-5">
+      <h1 class="h3 mb-1">Painel Administrativo</h1>
+      <p class="text-muted mb-0">Bem-vindo de volta! Aqui está o resumo do seu negócio hoje.</p>
+    </div>
+
+    <!-- Stats Summary -->
+    <div class="stats-grid">
+      <div class="stat-card box hover-lift">
+        <div class="icon-box blue">
+          <i class="fas fa-shopping-bag"></i>
         </div>
-
-        <!-- Corpo da Mensagem -->
-        <div class="message-body">
-
-            <!-- Secção da Introdução -->
-            <div class="columns">
-                <div class="column">
-                    <figure class="is-128x128">
-                        <img class="is-rounded" src="/images/img1.jpg" alt="Imagem" />
-                    </figure>
-                </div>
-
-                <div class="column is-9">
-                    <p>
-                        Gerencie cada etapa do seu negócio com eficiência e segurança.
-                        Nossa solução garante que suas operações sejam organizadas, reduzindo falhas e otimizando
-                        processos para que você tenha sempre o controle total do que entra e do que sai.
-                    </p>
-
-                    <p>
-                        Monitore, acompanhe e tome decisões assertivas com informações claras e objetivas.
-                        O fluxo da sua mercadoria deixa de ser um desafio e passa a ser um diferencial competitivo.
-                    </p>
-
-                    <p class="title is-5">
-                        <span class="tag is-dark is-medium">Tecnologia & Gestão</span>
-                    </p>
-                </div>
-            </div>
-
-            <!-- Secção dos Módulos -->
-            <div class="container">
-                <div class="columns is-centered">
-
-                    <!-- Compras -->
-                    <div class="column custom-column">
-                        <div class="box custom-box">
-                            <article class="message is-info">
-                                <div class="message-header">
-                                    <p>COMPRAS</p>
-                                </div>
-
-                                <ul class="styled-list">
-                                    <li><a routerLink="/compra"><i class="fas fa-shopping-cart"></i> Solicitar
-                                            Compra</a></li>
-                                    <li><a routerLink="/compra"><i class="fas fa-store"></i> Gerir Fornecedores</a></li>
-                                    <li><a routerLink="/compra"><i class="fas fa-history"></i> Histórico de Pedidos</a>
-                                    </li>
-                                </ul>
-                            </article>
-                        </div>
-                    </div>
-
-                    <!-- Vendas -->
-                    <div class="column custom-column">
-                        <div class="box custom-box">
-                            <article class="message is-success">
-                                <div class="message-header">
-                                    <p>VENDAS</p>
-                                </div>
-
-                                <ul class="styled-list">
-                                    <li><a routerLink="/venda"><i class="fas fa-plus-circle"></i> Nova Venda</a></li>
-                                    <li><a routerLink="/venda"><i class="fas fa-list"></i> Ver Todas as Vendas</a></li>
-                                    <li><a routerLink="/relatorio"><i class="fas fa-chart-bar"></i> Relatórios de
-                                            Vendas</a></li>
-                                </ul>
-                            </article>
-                        </div>
-                    </div>
-
-                    <!-- Inventário -->
-                    <div class="column custom-column">
-                        <div class="box custom-box">
-                            <article class="message is-info">
-                                <div class="message-header">
-                                    <p>INVENTÁRIO</p>
-                                </div>
-
-                                <ul class="styled-list">
-                                    <li><a routerLink="/inventario"><i class="fas fa-cubes"></i> Ver Estoque Actual</a>
-                                    </li>
-                                    <li><a routerLink="/inventario"><i class="fas fa-plus"></i> Adicionar Produto</a>
-                                    </li>
-                                    <li><a routerLink="/inventario"><i class="fas fa-exchange-alt"></i> Ajustes de
-                                            Estoque</a></li>
-                                </ul>
-                            </article>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- Secção dos Relatórios -->
-            <article>
-                <div class="title is-5 has-text-centered relatorio-header">
-                    <h5>RELATÓRIOS</h5>
-                </div>
-
-                <div>
-
-                    <div class="columns is-centered">
-
-                        <!-- Relatório Compras -->
-                        <div class="column custom-column">
-                            <div class="box custom-box">
-                                <article>
-                                    <div class="chart-container">
-                                        <canvas id="comprasChart"></canvas>
-                                    </div>
-                                </article>
-                                <p class="subtitle">COMPRA</p>
-                            </div>
-                        </div>
-
-                        <!-- Relatório Vendas -->
-                        <div class="column custom-column">
-                            <div class="box custom-box">
-                                <article>
-                                    <div class="chart-container">
-                                        <canvas id="vendasChart"></canvas>
-                                    </div>
-                                </article>
-                                <p class="subtitle">VENDA</p>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- Relatório Inventário -->
-                    <div class="columns is-centered">
-                        <div class="column is-half custom-column">
-                            <div class="box custom-box">
-                                <article>
-                                    <div class="chart-container">
-                                        <canvas id="inventarioChart"></canvas>
-                                    </div>
-                                </article>
-                                <p class="subtitle">INVENTÁRIO</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </article>
-
-            <br><br><br>
+        <div class="stat-info">
+          <h3>Vendas Totais</h3>
+          <div class="value">{{ statsData?.totalSales || 0 | currency:'MZN' }}</div>
         </div>
-    </article>
+      </div>
+
+      <div class="stat-card box hover-lift">
+        <div class="icon-box green">
+          <i class="fas fa-truck"></i>
+        </div>
+        <div class="stat-info">
+          <h3>Compras Efetuadas</h3>
+          <div class="value">{{ statsData?.totalPurchases || 0 | currency:'MZN' }}</div>
+        </div>
+      </div>
+
+      <div class="stat-card box hover-lift">
+        <div class="icon-box yellow">
+          <i class="fas fa-boxes"></i>
+        </div>
+        <div class="stat-info">
+          <h3>Produtos em Estoque</h3>
+          <div class="value">{{ statsData?.totalInventoryItems || 0 }}</div>
+        </div>
+      </div>
+
+      <div class="stat-card box hover-lift">
+        <div class="icon-box purple">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-info">
+          <h3>Fornecedores Ativos</h3>
+          <div class="value">{{ statsData?.activeSuppliers || 0 }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-grid">
+      <div class="chart-card box">
+        <h2><i class="fas fa-chart-line text-primary"></i> Desempenho de Vendas</h2>
+        <div class="chart-container" style="position: relative; height:300px; width:100%">
+          <canvas id="vendasChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card box">
+        <h2><i class="fas fa-chart-bar text-info"></i> Investimento em Compras</h2>
+        <div class="chart-container" style="position: relative; height:300px; width:100%">
+          <canvas id="comprasChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card box">
+        <h2><i class="fas fa-chart-pie text-warning"></i> Distribuição de Inventário</h2>
+        <div class="chart-container" style="position: relative; height:300px; width:100%">
+          <canvas id="inventarioChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

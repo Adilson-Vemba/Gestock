@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Navbar } from '../../components/navbar/navbar';
 import { Menu } from '../../components/menu/menu';
 import { ProductService } from '../../services/product';
@@ -9,15 +8,28 @@ import { ProductService } from '../../services/product';
 @Component({
   selector: 'app-inventario',
   standalone: true,
-  imports: [CommonModule, Navbar, Menu],
+  imports: [CommonModule, Navbar, Menu, ReactiveFormsModule],
   templateUrl: './inventario.html',
   styleUrl: './inventario.scss'
 })
 export class Inventario implements OnInit {
-
   products: any[] = [];
+  showModal = false;
+  editingProduct: any = null;
+  productForm: FormGroup;
+  selectedFile: File | null = null;
 
-  constructor(private productService: ProductService) { }
+  constructor(
+    private productService: ProductService,
+    private fb: FormBuilder
+  ) {
+    this.productForm = this.fb.group({
+      name: ['', Validators.required],
+      price: ['', [Validators.required, Validators.min(0.01)]],
+      quantity: [0, Validators.min(0)],
+      code: ['']
+    });
+  }
 
   ngOnInit() {
     this.carregarProdutos();
@@ -25,31 +37,71 @@ export class Inventario implements OnInit {
 
   carregarProdutos() {
     this.productService.getProducts().subscribe({
-      next: (data) => {
-        this.products = data;
-      },
-      error: (err) => {
-        console.error('Erro ao carregar produtos:', err);
-      }
+      next: (data) => this.products = data,
+      error: (err) => console.error('Erro ao carregar produtos:', err)
     });
   }
 
-  novoProduto() {
-    const name = prompt('Nome do produto:');
-    const price = prompt('Preço:');
-    if (name && price) {
-      this.productService.createProduct({ name, price: Number(price) }).subscribe(() => {
-        this.carregarProdutos();
+  abrirModal(product: any = null) {
+    this.editingProduct = product;
+    if (product) {
+      this.productForm.patchValue({
+        name: product.name,
+        price: product.price,
+        quantity: product.quantity,
+        code: product.code
+      });
+    } else {
+      this.productForm.reset({ quantity: 0 });
+    }
+    this.showModal = true;
+  }
+
+  fecharModal() {
+    this.showModal = false;
+    this.editingProduct = null;
+    this.selectedFile = null;
+  }
+
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+  }
+
+  salvarProduto() {
+    if (this.productForm.invalid) return;
+
+    const formData = new FormData();
+    Object.keys(this.productForm.value).forEach(key => {
+      formData.append(key, this.productForm.value[key]);
+    });
+    if (this.selectedFile) {
+      formData.append('photo', this.selectedFile);
+    }
+
+    if (this.editingProduct) {
+      this.productService.updateProduct(this.editingProduct.code || this.editingProduct._id, formData).subscribe({
+        next: () => {
+          this.carregarProdutos();
+          this.fecharModal();
+        },
+        error: (err) => alert('Erro ao atualizar produto')
+      });
+    } else {
+      this.productService.createProduct(formData).subscribe({
+        next: () => {
+          this.carregarProdutos();
+          this.fecharModal();
+        },
+        error: (err) => alert('Erro ao criar produto')
       });
     }
   }
 
-  editarProduto(product: any) {
-    const name = prompt('Novo nome:', product.name);
-    const price = prompt('Novo preço:', product.price);
-    if (name && price) {
-      this.productService.updateProduct(product.code || product._id, { name, price: Number(price) }).subscribe(() => {
-        this.carregarProdutos();
+  eliminarProduto(product: any) {
+    if (confirm(`Tem a certeza que deseja eliminar o produto ${product.name}?`)) {
+      this.productService.deleteProduct(product.code || product._id).subscribe({
+        next: () => this.carregarProdutos(),
+        error: (err) => alert('Erro ao eliminar produto')
       });
     }
   }
@@ -63,5 +115,4 @@ export class Inventario implements OnInit {
       });
     }
   }
-
 }

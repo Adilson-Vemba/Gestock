@@ -1,4 +1,11 @@
-# Gestock - Sistema de Gestão de Stock
+# Gestock - Sistema de Gestão de Stock e E-Commerce
+
+## 🔐 Credenciais de Acesso (Desenvolvimento)
+| Nível | Email | Senha |
+| :--- | :--- | :--- |
+| **Admin Principal** | `admin@gestock.com` | `admin123` |
+
+---
 
 Este projeto é um sistema de gestão de stock composto por um **Frontend** em Angular e um **Backend** em Node.js (Express) com MongoDB.
 

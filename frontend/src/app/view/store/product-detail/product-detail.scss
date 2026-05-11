@@ -1,0 +1,38 @@
+.store-container {
+  min-height: 100vh;
+  background-color: var(--bg-base);
+
+  .store-navbar {
+    padding: 1rem 0;
+    margin-bottom: 3rem;
+    background-color: white;
+  }
+
+  .product-gallery {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    
+    img {
+      max-height: 600px;
+      object-fit: contain;
+    }
+  }
+
+  .product-info-detailed {
+    .breadcrumb-item a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .quantity-selector {
+      border: 1px solid var(--border-light);
+      button {
+        text-decoration: none;
+        &:hover { color: var(--primary); }
+      }
+    }
+  }
+}

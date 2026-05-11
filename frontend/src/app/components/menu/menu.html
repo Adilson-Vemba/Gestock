@@ -2,28 +2,34 @@
 <aside class="menu-sidebar">
   <ul class="menu-list">
     <li>
-      <a routerLink="/" routerLinkActive="is-active">
+      <a routerLink="/admin" routerLinkActive="is-active" [routerLinkActiveOptions]="{exact: true}">
         <span class="icon"><i class="fas fa-home"></i></span>
       </a>
     </li>
     <li>
-      <a routerLink="/compra" routerLinkActive="is-active">
+      <a routerLink="/admin/compra" routerLinkActive="is-active">
         <span class="icon"><i class="fas fa-truck-loading"></i></span>
       </a>
     </li>
     <li>
-      <a routerLink="/venda" routerLinkActive="is-active">
+      <a routerLink="/admin/venda" routerLinkActive="is-active">
         <span class="icon"><i class="fas fa-dollar-sign"></i></span>
       </a>
     </li>
     <li>
-      <a routerLink="/inventario" routerLinkActive="is-active">
+      <a routerLink="/admin/inventario" routerLinkActive="is-active">
         <span class="icon"><i class="fas fa-boxes"></i></span>
       </a>
     </li>
     <li>
-      <a routerLink="/relatorio" routerLinkActive="is-active">
+      <a routerLink="/admin/relatorio" routerLinkActive="is-active">
         <span class="icon"><i class="fas fa-chart-line"></i></span>
+      </a>
+    </li>
+    <!-- Link extra para ir para a loja -->
+    <li style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+      <a routerLink="/" title="Ver Loja">
+        <span class="icon"><i class="fas fa-store"></i></span>
       </a>
     </li>
   </ul>

@@ -1,0 +1,28 @@
+/* src/app/styles/_variables.scss */
+:root {
+  --primary-color: #3498db;
+  --primary-color-dark: #2980b9;
+  --secondary-color: #f1f1f1;
+  --text-primary: #212529;
+  --background-light: #f5f7fa;
+  --background-dark: #1e1e2f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: #4a90e2;
+    --primary-color-dark: #357ab7;
+    --secondary-color: #2c2c3a;
+    --text-primary: #e0e0e0;
+    --background-light: #2b2b40;
+    --background-dark: #121212;
+  }
+}
+
+/* Utility classes */
+.body-bg {
+  background-color: var(--background-light);
+}
+.dark .body-bg {
+  background-color: var(--background-dark);
+}

@@ -1,139 +1,178 @@
 <app-navbar></app-navbar>
 <app-menu></app-menu>
-<div class="sales-container">
 
-  <!-- Cabeçalho -->
-  <header class="sales-header">
-    <div class="title">
-      <i class="fas fa-dollar-sign"></i>
-      <h2>Vendas</h2>
-    </div>
+<div class="main-content">
+  <div class="sales-container container-fluid">
+    <header class="d-flex justify-content-between align-items-center mb-5">
+      <div>
+        <h1 class="h3 mb-1">Vendas</h1>
+        <p class="text-muted mb-0">Monitore o desempenho das suas vendas em tempo real.</p>
+      </div>
 
-    <div class="header-actions">
-      <button class="btn-secondary" (click)="filtrar()">
-        <i class="fas fa-filter"></i>
-        Filtrar
-      </button>
+      <div class="header-actions">
+        <button class="btn btn-light rounded-pill px-4" (click)="filtrar()">
+          <i class="fas fa-filter me-2"></i> Filtrar
+        </button>
+        <button class="btn btn-primary rounded-pill px-4" (click)="novaVenda()">
+          <i class="fas fa-plus me-2"></i> Nova Venda
+        </button>
+      </div>
+    </header>
 
-      <button class="btn-primary" (click)="novaVenda()">
-        <i class="fas fa-plus"></i>
-        Nova Venda
-      </button>
-    </div>
-  </header>
+    <!-- Resumo -->
+    <section class="sales-summary">
+      <div class="summary-card box hover-lift">
+        <span>Total de Vendas</span>
+        <strong>{{ sales.length }}</strong>
+      </div>
 
-  <!-- Resumo -->
-  <section class="sales-summary">
-    <div class="summary-card">
-      <span>Total de Vendas</span>
-      <strong>18</strong>
-    </div>
+      <div class="summary-card box hover-lift">
+        <span>Receita Total</span>
+        <strong>{{ totalRevenue | currency:'MZN' }}</strong>
+      </div>
 
-    <div class="summary-card">
-      <span>Receita</span>
-      <strong>420 000 Kz</strong>
-    </div>
+      <div class="summary-card box hover-lift">
+        <span>Vendas Hoje</span>
+        <strong>{{ todayRevenue | currency:'MZN' }}</strong>
+      </div>
+    </section>
 
-    <div class="summary-card">
-      <span>Hoje</span>
-      <strong>58 000 Kz</strong>
-    </div>
-  </section>
-
-  <!-- Tabela de Vendas -->
-  <section class="sales-list">
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Data</th>
-          <th>Produtos</th>
-          <th>Total</th>
-          <th>Vendedor</th>
-          <th>Ação</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let sale of sales">
-          <td>{{ sale.id || sale._id | slice: -5 }}</td>
-          <td>{{ sale.createdAt | date: 'dd/MM/yyyy' }}</td>
-          <td>
-            <ul class="product-list-cell">
-              <li *ngFor="let item of sale.products">
-                {{ item.product?.name }} (x{{ item.quantity }})
-              </li>
-            </ul>
-          </td>
-          <td>{{ sale.total || 0 | number }} Kz</td>
-          <td>{{ sale.seller || 'Admin' }}</td>
-          <td class="actions">
-            <button class="btn-icon" title="Ver Detalhes" (click)="verDetalhes(sale)">
-              <i class="fas fa-eye"></i>
-            </button>
-            <button class="btn-icon" title="Ver Fatura" (click)="verFatura(sale)">
-              <i class="fas fa-file-invoice-dollar"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-
-  <!-- Modal Nova Venda -->
-  <div class="modal-overlay" *ngIf="showModal">
-    <div class="modal-card">
-      <header class="modal-header">
-        <h3>Nova Venda</h3>
-        <button class="close-btn" (click)="fecharModal()">&times;</button>
-      </header>
-
-      <form [formGroup]="vendaForm" (ngSubmit)="confirmarVenda()" class="modal-body">
-        <div class="form-group">
-          <label for="productCode">Produto</label>
-          <select id="productCode" formControlName="productCode">
-            <option value="">Selecione um produto</option>
-            <option *ngFor="let p of products" [value]="p.code">{{ p.name }} (Estoque: {{ p.quantity }})</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="quantity">Quantidade</label>
-          <input type="number" id="quantity" formControlName="quantity" min="1">
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn-secondary" (click)="fecharModal()">Cancelar</button>
-          <button type="submit" class="btn-primary" [disabled]="vendaForm.invalid">Confirmar Venda</button>
-        </div>
-      </form>
-    </div>
+    <!-- Tabela de Vendas -->
+    <section class="sales-list box p-0">
+      <table class="table align-middle mb-0">
+        <thead>
+          <tr>
+            <th width="100">ID</th>
+            <th>Data</th>
+            <th>Produtos</th>
+            <th>Total</th>
+            <th>Vendedor</th>
+            <th class="text-end">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sale of sales">
+            <td><code class="small text-primary">#{{ sale.id || sale._id | slice: -6 }}</code></td>
+            <td>{{ sale.createdAt | date: 'dd MMM, yyyy' }}</td>
+            <td>
+              <div class="product-list-cell">
+                <div *ngFor="let item of sale.products | slice:0:2">
+                  {{ $any(item).product?.name }} <span class="text-muted">(x{{ $any(item).quantity }})</span>
+                </div>
+                <div class="text-muted small" *ngIf="sale.products.length > 2">
+                  + {{ sale.products.length - 2 }} outros produtos
+                </div>
+              </div>
+            </td>
+            <td class="fw-bold">{{ sale.total || 0 | currency:'MZN' }}</td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar-sm me-2 bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">
+                  <i class="fas fa-user small text-muted"></i>
+                </div>
+                {{ sale.seller || 'Admin' }}
+              </div>
+            </td>
+            <td class="text-end">
+              <div class="btn-group">
+                <button class="btn btn-sm btn-light" title="Ver Detalhes" (click)="verDetalhes(sale)">
+                  <i class="fas fa-eye text-primary"></i>
+                </button>
+                <button class="btn btn-sm btn-light" title="Ver Fatura" (click)="verFatura(sale)">
+                  <i class="fas fa-file-invoice-dollar text-success"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="sales.length === 0">
+            <td colspan="6" class="text-center py-5 text-muted">
+              Nenhuma venda registrada no sistema.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
   </div>
+</div>
 
-  <!-- Modal Detalhes da Venda -->
-  <div class="modal-overlay" *ngIf="showDetailsModal">
-    <div class="modal-card">
-      <header class="modal-header">
-        <h3>Detalhes da Venda</h3>
-        <button class="close-btn" (click)="fecharDetalhesModal()">&times;</button>
-      </header>
+<!-- Modal Nova Venda -->
+<div class="modal-overlay" *ngIf="showModal">
+  <div class="modal-card">
+    <header class="modal-header">
+      <h3>Nova Venda</h3>
+      <button class="btn-close" (click)="fecharModal()"></button>
+    </header>
 
-      <div class="modal-body" *ngIf="selectedSale">
-        <p><strong>ID:</strong> {{ selectedSale.id || selectedSale._id }}</p>
-        <p><strong>Data:</strong> {{ selectedSale.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
-        <p><strong>Total:</strong> {{ selectedSale.total || 0 | number }} Kz</p>
+    <form [formGroup]="vendaForm" (ngSubmit)="confirmarVenda()" class="modal-body">
+      <div class="form-group">
+        <label>Produto</label>
+        <select class="input form-select" formControlName="productCode">
+          <option value="">Selecione um produto</option>
+          <option *ngFor="let p of products" [value]="p.code">{{ p.name }} (Estoque: {{ p.quantity }})</option>
+        </select>
+      </div>
 
-        <h4 style="margin-top: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;">Produtos</h4>
-        <ul style="list-style: none; padding: 0;">
-          <li *ngFor="let item of selectedSale.products" style="padding: 5px 0; border-bottom: 1px dashed #f1f1f1;">
-            {{ item.product?.name }} - {{ item.quantity }}x
-          </li>
-        </ul>
+      <div class="form-group">
+        <label>Quantidade</label>
+        <input type="number" class="input" formControlName="quantity" min="1" placeholder="Quantidade">
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn-secondary" (click)="fecharDetalhesModal()">Fechar</button>
+        <button type="button" class="btn btn-light rounded-pill px-4" (click)="fecharModal()">Cancelar</button>
+        <button type="submit" class="btn btn-primary rounded-pill px-4" [disabled]="vendaForm.invalid">Confirmar Venda</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Detalhes da Venda -->
+<div class="modal-overlay" *ngIf="showDetailsModal">
+  <div class="modal-card">
+    <header class="modal-header">
+      <h3>Detalhes da Venda</h3>
+      <button class="btn-close" (click)="fecharDetalhesModal()"></button>
+    </header>
+
+    <div class="modal-body" *ngIf="selectedSale">
+      <div class="row mb-4">
+        <div class="col-6">
+          <label class="text-muted small d-block">ID DA VENDA</label>
+          <code class="h6">{{ selectedSale.id || selectedSale._id }}</code>
+        </div>
+        <div class="col-6 text-end">
+          <label class="text-muted small d-block">DATA</label>
+          <span class="h6">{{ selectedSale.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+      </div>
+
+      <label class="text-muted small d-block mb-2">PRODUTOS</label>
+      <div class="box p-0 overflow-hidden mb-4">
+        <table class="table table-sm mb-0">
+          <thead class="bg-light">
+            <tr>
+              <th>Produto</th>
+              <th class="text-center">Qtd</th>
+              <th class="text-end">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of selectedSale.products">
+              <td>{{ $any(item).product?.name }}</td>
+              <td class="text-center">{{ $any(item).quantity }}</td>
+              <td class="text-end">{{ ($any(item).product?.price * $any(item).quantity) | currency:'MZN' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center">
+        <span class="h5 mb-0">Total</span>
+        <span class="h4 mb-0 fw-bold text-primary">{{ selectedSale.total || 0 | currency:'MZN' }}</span>
       </div>
     </div>
-  </div>
 
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary rounded-pill px-5" (click)="fecharDetalhesModal()">Fechar</button>
+    </div>
+  </div>
 </div>

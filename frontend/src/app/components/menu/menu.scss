@@ -1,11 +1,11 @@
 .menu-sidebar {
-  width: 60px;
-  background-color: #ffffff;
-  height: calc(70vh - 60px); // altura total menos a navbar
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  width: 70px;
+  background-color: var(--bg-surface);
+  height: calc(100vh - 70px);
+  border-right: 1px solid var(--border-light);
   position: fixed;
-  top: 60px;   // começa logo abaixo da navbar
-  left: 0;     // sidebar à esquerda
+  top: 70px;
+  left: 0;
   display: flex;
   flex-direction: column;
   align-items: center;

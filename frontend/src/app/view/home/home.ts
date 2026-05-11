@@ -12,7 +12,7 @@ import { StatsService } from '../../services/stats';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [Navbar, Menu, CommonModule, RouterLink],
+  imports: [Navbar, Menu, CommonModule],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
@@ -74,16 +74,33 @@ export class Home {
       });
     }
 
+    // Chart Global Defaults
+    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.color = '#64748b';
+
     // Gráfico Compras
     new Chart("comprasChart", {
       type: 'bar',
       data: {
-        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'],
+        labels: meses.slice(0, 6),
         datasets: [{
-          label: 'Compras',
-          data: comprasPorMes,
-          backgroundColor: '#209cee'
+          label: 'Investimento (MZN)',
+          data: comprasPorMes.slice(0, 6),
+          backgroundColor: '#6366f1',
+          borderRadius: 8,
+          barThickness: 20
         }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+          x: { grid: { display: false } }
+        }
       }
     });
 
@@ -91,14 +108,29 @@ export class Home {
     new Chart("vendasChart", {
       type: 'line',
       data: {
-        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'],
+        labels: meses.slice(0, 6),
         datasets: [{
-          label: 'Vendas',
-          data: vendasPorMes,
-          borderColor: '#23d160',
-          backgroundColor: 'rgba(35,209,96,0.2)',
-          fill: true
+          label: 'Receita (MZN)',
+          data: vendasPorMes.slice(0, 6),
+          borderColor: '#10b981',
+          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 4,
+          pointBackgroundColor: '#10b981'
         }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+          x: { grid: { display: false } }
+        }
       }
     });
 
@@ -106,12 +138,23 @@ export class Home {
     new Chart("inventarioChart", {
       type: 'doughnut',
       data: {
-        labels: labelsInventario,
+        labels: labelsInventario.length ? labelsInventario : ['Sem Dados'],
         datasets: [{
-          label: 'Inventário (Qtd)',
-          data: dadosInventario,
-          backgroundColor: ['#ffdd57', '#ff3860', '#3273dc']
+          data: dadosInventario.length ? dadosInventario : [1],
+          backgroundColor: ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#a855f7'],
+          borderWidth: 0,
+          hoverOffset: 4
         }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { usePointStyle: true, padding: 20 }
+          }
+        }
       }
     });
   }

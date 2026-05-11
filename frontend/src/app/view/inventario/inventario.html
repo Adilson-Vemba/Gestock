@@ -1,73 +1,113 @@
 <app-navbar></app-navbar>
 <app-menu></app-menu>
-<div class="inventory-container">
 
-  <!-- Cabeçalho -->
-  <header class="inventory-header">
-    <div class="title">
-      <i class="fas fa-boxes"></i>
-      <h2>Inventário</h2>
+<div class="main-content">
+  <div class="inventory-container container-fluid">
+    <div class="header-actions d-flex justify-content-between align-items-center">
+      <div>
+        <h1 class="h3 mb-1">Inventário</h1>
+        <p class="text-muted mb-0">Gerencie seu estoque e catálogo de produtos.</p>
+      </div>
+      <button class="btn btn-primary rounded-pill px-4" (click)="abrirModal()">
+        <i class="fas fa-plus me-2"></i> Novo Produto
+      </button>
     </div>
 
-    <button class="btn-primary" (click)="novoProduto()">
-      <i class="fas fa-plus"></i>
-      Novo Produto
-    </button>
-  </header>
+    <div class="table-card mt-4">
+      <table class="table align-middle mb-0">
+        <thead>
+          <tr>
+            <th width="80">Foto</th>
+            <th>Produto</th>
+            <th>Código</th>
+            <th>Preço</th>
+            <th>Estoque</th>
+            <th class="text-end">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of products">
+            <td>
+              <img [src]="product.photo ? 'http://localhost:8080/' + product.photo : '/images/placeholder.png'" class="product-img" alt="Product">
+            </td>
+            <td>
+              <div class="fw-bold">{{ product.name }}</div>
+            </td>
+            <td><code>{{ product.code }}</code></td>
+            <td class="fw-bold">{{ product.price | currency:'MZN' }}</td>
+            <td>
+              <span class="badge rounded-pill badge-stock" 
+                    [ngClass]="{'bg-success-subtle text-success': product.quantity > 10, 'bg-warning-subtle text-warning': product.quantity <= 10 && product.quantity > 0, 'bg-danger-subtle text-danger': product.quantity <= 0}">
+                {{ product.quantity }} un
+              </span>
+            </td>
+            <td class="text-end">
+              <div class="btn-group">
+                <button class="btn btn-sm btn-light" title="Entrada de Estoque" (click)="estoqueEntrada(product)">
+                  <i class="fas fa-plus-circle text-success"></i>
+                </button>
+                <button class="btn btn-sm btn-light" title="Editar" (click)="abrirModal(product)">
+                  <i class="fas fa-edit text-primary"></i>
+                </button>
+                <button class="btn btn-sm btn-light" title="Excluir" (click)="eliminarProduto(product)">
+                  <i class="fas fa-trash text-danger"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="products.length === 0">
+            <td colspan="6" class="text-center py-5 text-muted">
+              Nenhum produto cadastrado no inventário.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
-  <!-- Filtros -->
-  <section class="inventory-filters">
-    <input type="text" placeholder="Pesquisar produto..." />
+<!-- Modal de Produto -->
+<div class="custom-modal" *ngIf="showModal">
+  <div class="modal-content">
+    <h2>{{ editingProduct ? 'Editar Produto' : 'Novo Produto' }}</h2>
+    
+    <form [formGroup]="productForm" (ngSubmit)="salvarProduto()">
+      <div class="form-group">
+        <label>Nome do Produto</label>
+        <input type="text" class="input" formControlName="name" placeholder="Ex: Câmera Sony A7III">
+      </div>
 
-    <select>
-      <option value="">Todos</option>
-      <option value="low">Baixo estoque</option>
-      <option value="ok">Estoque normal</option>
-    </select>
-  </section>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Preço (MZN)</label>
+            <input type="number" class="input" formControlName="price" placeholder="0.00">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Quantidade Inicial</label>
+            <input type="number" class="input" formControlName="quantity" placeholder="0">
+          </div>
+        </div>
+      </div>
 
-  <!-- Tabela -->
-  <section class="inventory-table">
-    <table>
-      <thead>
-        <tr>
-          <th>Produto</th>
-          <th>Preço</th>
-          <th>Quantidade</th>
-          <th>Status</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
+      <div class="form-group" *ngIf="editingProduct">
+        <label>Código</label>
+        <input type="text" class="input" formControlName="code" readonly>
+      </div>
 
-      <tbody>
-        <tr *ngFor="let product of products">
-          <td class="product">
-            <div class="avatar">
-              <i class="fas fa-box"></i>
-            </div>
-            <span>{{ product.name }}</span>
-          </td>
+      <div class="form-group">
+        <label>Foto do Produto</label>
+        <input type="file" class="input" (change)="onFileSelected($event)" accept="image/*">
+      </div>
 
-          <td>{{ product.price }} Kz</td>
-          <td>{{ product.quantity }}</td>
-
-          <td>
-            <span class="status" [class.low]="product.quantity < 5" [class.ok]="product.quantity >= 5">
-              {{ product.quantity < 5 ? 'Baixo estoque' : 'Normal' }} </span>
-          </td>
-
-          <td class="actions">
-            <button title="Editar" (click)="editarProduto(product)">
-              <i class="fas fa-pen"></i>
-            </button>
-
-            <button title="Entrada de estoque" (click)="estoqueEntrada(product)">
-              <i class="fas fa-plus-circle"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-
+      <div class="modal-actions">
+        <button type="button" class="btn btn-light rounded-pill px-4" (click)="fecharModal()">Cancelar</button>
+        <button type="submit" class="btn btn-primary rounded-pill px-4" [disabled]="productForm.invalid">
+          {{ editingProduct ? 'Salvar Alterações' : 'Criat Produto' }}
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

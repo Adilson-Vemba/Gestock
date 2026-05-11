@@ -21,6 +21,17 @@ export class Venda implements OnInit {
   showDetailsModal = false;
   selectedSale: any = null;
   vendaForm: FormGroup;
+  
+  get totalRevenue(): number {
+    return this.sales.reduce((acc, sale) => acc + (sale.total || 0), 0);
+  }
+
+  get todayRevenue(): number {
+    const today = new Date().setHours(0, 0, 0, 0);
+    return this.sales
+      .filter(sale => new Date(sale.createdAt).setHours(0, 0, 0, 0) === today)
+      .reduce((acc, sale) => acc + (sale.total || 0), 0);
+  }
 
   constructor(
     private orderService: OrderService,

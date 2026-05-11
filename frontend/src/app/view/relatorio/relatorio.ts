@@ -72,12 +72,13 @@ export class Relatorio implements OnInit {
     new Chart(ctx, {
       type: 'line',
       data: {
-        labels: labels,
+        labels: labels.slice(0, 6),
         datasets: [{
-          label: 'Vendas (Kz)',
-          data: data,
-          borderColor: '#3498db;',
-          backgroundColor: 'rgba(0,209,178,0.2)',
+          label: 'Vendas (MZN)',
+          data: data.slice(0, 6),
+          borderColor: '#10b981',
+          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          borderWidth: 3,
           fill: true,
           tension: 0.3
         }]

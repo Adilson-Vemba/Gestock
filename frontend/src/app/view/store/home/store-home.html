@@ -1,0 +1,216 @@
+<div class="store-container">
+  <!-- Navbar -->
+  <nav class="store-navbar glass-panel">
+    <div class="container d-flex justify-content-between align-items-center">
+      <a routerLink="/" class="navbar-brand">
+        <img src="/images/Logo.svg" alt="Gestock Logo" height="40">
+      </a>
+      <div class="nav-links d-flex align-items-center">
+        <a routerLink="/" class="nav-item">Explorar</a>
+        <a routerLink="/login" class="nav-item">Entrar</a>
+        <a routerLink="/admin" class="nav-item d-none d-md-inline">Painel Admin</a>
+        <a routerLink="/carrinho" class="cart-link ms-3">
+          <i class="fas fa-shopping-basket"></i>
+          <span class="badge rounded-pill" *ngIf="(cartItems$ | async)?.length">{{ (cartItems$ | async)?.length }}</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 text-center text-lg-start">
+          <span class="badge bg-primary-light text-primary px-3 py-2 rounded-pill mb-3">Revolução em Gestão 2024</span>
+          <h1 class="display-3 fw-bold mb-4">Gestão Inteligente para o seu Negócio</h1>
+          <p class="lead mb-5 text-muted">O Gestock é a solução completa que une e-commerce profissional e controle de estoque avançado em uma única plataforma premium.</p>
+          <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
+            <a href="#catalog" class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-lg">Começar Agora</a>
+            <a href="#features" class="btn btn-outline-primary btn-lg px-5 py-3 rounded-pill">Saiba Mais</a>
+          </div>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block">
+          <img src="https://img.freepik.com/free-vector/logistics-management-concept-illustration_114360-1282.jpg" alt="Hero Illustration" class="img-fluid floating">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Features Section -->
+  <section id="features" class="features-section">
+    <div class="container">
+      <h2 class="section-title">Funcionalidades Poderosas</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="feature-card box border-0">
+            <div class="icon-box">
+              <i class="fas fa-box-open"></i>
+            </div>
+            <h3>Controle de Estoque</h3>
+            <p>Gerenciamento total de entradas e saídas com baixa automática e alertas de reposição em tempo real.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card box border-0">
+            <div class="icon-box">
+              <i class="fas fa-store"></i>
+            </div>
+            <h3>Loja Virtual</h3>
+            <p>Uma vitrine profissional para seus clientes, com checkout otimizado e experiência de usuário premium.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card box border-0">
+            <div class="icon-box">
+              <i class="fas fa-chart-pie"></i>
+            </div>
+            <h3>Relatórios Analíticos</h3>
+            <p>Dados consolidados sobre vendas, lucros e desempenho mensal para tomadas de decisão assertivas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values Section -->
+  <section class="values-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-5 mb-5 mb-lg-0">
+          <img src="https://img.freepik.com/free-vector/strategic-consulting-concept-illustration_114360-9003.jpg" alt="Values Image" class="img-fluid rounded-4 shadow-lg">
+        </div>
+        <div class="col-lg-6 offset-lg-1">
+          <h2 class="section-title text-start mb-4">Nossos Valores</h2>
+          <p class="mb-5 text-muted">Acreditamos que a tecnologia deve ser acessível e poderosa. Nossa missão é simplificar o complexo mundo da gestão empresarial.</p>
+          
+          <div class="value-item">
+            <div class="check-icon"><i class="fas fa-check"></i></div>
+            <div>
+              <h4>Excelência Visual</h4>
+              <p>Interfaces pensadas para encantar seus clientes e facilitar o trabalho da sua equipe.</p>
+            </div>
+          </div>
+
+          <div class="value-item">
+            <div class="check-icon"><i class="fas fa-check"></i></div>
+            <div>
+              <h4>Segurança de Dados</h4>
+              <p>Proteção avançada para suas informações comerciais e transações de clientes.</p>
+            </div>
+          </div>
+
+          <div class="value-item">
+            <div class="check-icon"><i class="fas fa-check"></i></div>
+            <div>
+              <h4>Escalabilidade</h4>
+              <p>O Gestock cresce junto com o seu negócio, de pequenos estoques a grandes operações.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Catalog Section -->
+  <main id="catalog" class="container py-6">
+    <div class="d-flex justify-content-between align-items-end mb-5">
+      <div>
+        <h2 class="h1 fw-bold mb-2">Catálogo de Produtos</h2>
+        <p class="text-muted">Encontre as melhores ofertas selecionadas para você.</p>
+      </div>
+    </div>
+
+    <div *ngIf="loading" class="text-center py-5">
+      <div class="spinner-grow text-primary" role="status"></div>
+      <p class="mt-3 text-muted">Preparando vitrine...</p>
+    </div>
+
+    <div *ngIf="!loading && products.length === 0" class="text-center py-5 box">
+      <i class="fas fa-search fa-3x text-muted mb-3 opacity-25"></i>
+      <p class="h5 text-muted">Nenhum produto disponível no momento.</p>
+    </div>
+
+    <div class="row g-4" *ngIf="!loading">
+      <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let product of products">
+        <div class="product-card box border-0 hover-lift">
+          <div class="product-image">
+            <img [src]="product.photo ? 'http://localhost:8080/' + product.photo : 'https://placehold.co/600x400/f8fafc/6366f1?text=Produto'" [alt]="product.name">
+          </div>
+          <div class="product-info p-4">
+            <h3 class="product-name h6 mb-1 text-truncate">{{ product.name }}</h3>
+            <p class="product-price h5 text-primary fw-bold mb-3">{{ product.price | currency:'MZN' }}</p>
+            <div class="d-flex gap-2">
+              <button class="btn btn-primary flex-grow-1 rounded-pill" (click)="addToCart(product)">
+                <i class="fas fa-cart-plus me-1"></i> Adicionar
+              </button>
+              <button class="btn btn-light btn-icon rounded-circle" [routerLink]="['/produto', product.code]" title="Ver detalhes">
+                <i class="fas fa-eye text-primary"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- CTA Section -->
+  <section class="py-6 bg-primary text-white text-center">
+    <div class="container">
+      <h2 class="h1 fw-bold mb-4">Pronto para transformar seu negócio?</h2>
+      <p class="lead mb-5 opacity-75">Junte-se a centenas de empreendedores que já utilizam o Gestock.</p>
+      <a routerLink="/login" class="btn btn-light btn-lg px-5 py-3 rounded-pill text-primary fw-bold">Criar Conta Gratuita</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="store-footer">
+    <div class="container">
+      <div class="row g-5">
+        <div class="col-lg-4">
+          <img src="/images/Logo.svg" alt="Gestock" class="footer-logo">
+          <p class="text-slate-400 opacity-75 mb-4">A plataforma líder em gestão de e-commerce e estoque para pequenas e médias empresas.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2 offset-lg-2">
+          <h5 class="fw-bold mb-4">Plataforma</h5>
+          <ul class="footer-links">
+            <li><a href="#catalog">Catálogo</a></li>
+            <li><a href="#features">Funcionalidades</a></li>
+            <li><a href="#">Preços</a></li>
+            <li><a href="#">Suporte</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h5 class="fw-bold mb-4">Empresa</h5>
+          <ul class="footer-links">
+            <li><a href="#">Sobre nós</a></li>
+            <li><a href="#">Contatos</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Termos</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-2">
+          <h5 class="fw-bold mb-4">Admin</h5>
+          <ul class="footer-links">
+            <li><a routerLink="/admin">Acesso Restrito</a></li>
+            <li><a href="#">Documentação</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="my-5 opacity-10">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+        <p class="text-slate-400 opacity-50 mb-0 small">&copy; 2024 Gestock. Desenvolvido com paixão para empreendedores.</p>
+        <div class="payment-methods opacity-50">
+          <i class="fab fa-cc-visa fa-2x mx-2"></i>
+          <i class="fab fa-cc-mastercard fa-2x mx-2"></i>
+          <i class="fab fa-cc-paypal fa-2x mx-2"></i>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>

@@ -7,17 +7,25 @@ import { Compra } from './view/compra/compra';
 import { Login } from './view/login/login';
 import { Cadastro } from './view/cadastro/cadastro';
 
-
+// Storefront components
+import { StoreHome } from './view/store/home/store-home';
+import { Cart } from './view/store/cart/cart';
+import { ProductDetail } from './view/store/product-detail/product-detail';
 
 export const routes: Routes = [
-  
- 
-{ path: '', component: Home},        // rota principal
-{ path: 'venda', component: Venda },
-{ path: 'inventario', component: Inventario },
-{ path: 'relatorio', component: Relatorio },
-{ path: 'compra', component: Compra},
-{ path: 'login', component: Login},
-{ path: 'cadastro', component: Cadastro},
-  { path: '**', redirectTo: '' }      // redireciona rotas não encontradas para Home
+  // Storefront (B2C)
+  { path: '', component: StoreHome },
+  { path: 'carrinho', component: Cart },
+  { path: 'produto/:code', component: ProductDetail },
+  { path: 'login', component: Login },
+  { path: 'cadastro', component: Cadastro },
+
+  // Admin Dashboard (B2B)
+  { path: 'admin', component: Home },
+  { path: 'admin/venda', component: Venda },
+  { path: 'admin/inventario', component: Inventario },
+  { path: 'admin/relatorio', component: Relatorio },
+  { path: 'admin/compra', component: Compra },
+
+  { path: '**', redirectTo: '' }
 ];

@@ -1,0 +1,70 @@
+<div class="store-container">
+  <nav class="store-navbar glass-panel">
+    <div class="container d-flex justify-content-between align-items-center">
+      <a routerLink="/" class="navbar-brand">
+        <img src="/images/Logo.svg" alt="Gestock Logo" height="40">
+      </a>
+      <div class="nav-links">
+        <a routerLink="/" class="nav-item">Voltar para a Loja</a>
+        <a routerLink="/carrinho" class="cart-link ms-4">
+          <i class="fas fa-shopping-cart"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-5" *ngIf="!loading && product">
+    <div class="row g-5">
+      <div class="col-md-6">
+        <div class="product-gallery box p-0 overflow-hidden">
+          <img [src]="product.photo ? 'http://localhost:8080/' + product.photo : '/images/placeholder.png'" class="img-fluid w-100" [alt]="product.name">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="product-info-detailed">
+          <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a routerLink="/">Loja</a></li>
+              <li class="breadcrumb-item active">{{ product.name }}</li>
+            </ol>
+          </nav>
+          
+          <h1 class="display-5 fw-bold mb-3">{{ product.name }}</h1>
+          <p class="text-muted mb-4">Código do Produto: {{ product.code }}</p>
+          
+          <h2 class="text-primary display-6 fw-bold mb-4">{{ product.price | currency:'MZN' }}</h2>
+          
+          <div class="stock-status mb-4">
+            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill" *ngIf="product.quantity > 0">
+              <i class="fas fa-check-circle me-1"></i> Em Estoque ({{ product.quantity }} unidades)
+            </span>
+            <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill" *ngIf="product.quantity <= 0">
+              <i class="fas fa-times-circle me-1"></i> Esgotado
+            </span>
+          </div>
+
+          <p class="product-description lead mb-5">
+            Excelente produto com qualidade garantida pela Gestock. Ideal para modernizar seu inventário e otimizar suas vendas.
+          </p>
+
+          <div class="purchase-actions d-flex align-items-center gap-3">
+            <div class="quantity-selector d-flex align-items-center box py-2 px-3 m-0">
+              <button class="btn btn-link text-main p-0" (click)="updateQuantity(-1)"><i class="fas fa-minus"></i></button>
+              <span class="mx-3 fw-bold">{{ quantity }}</span>
+              <button class="btn btn-link text-main p-0" (click)="updateQuantity(1)"><i class="fas fa-plus"></i></button>
+            </div>
+            <button class="btn btn-primary btn-lg rounded-pill px-5 flex-grow-1" [disabled]="product.quantity <= 0" (click)="addToCart()">
+              <i class="fas fa-cart-plus me-2"></i> Adicionar ao Carrinho
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div *ngIf="loading" class="container py-5 text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Carregando...</span>
+    </div>
+  </div>
+</div>

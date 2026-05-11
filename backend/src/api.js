@@ -47,9 +47,9 @@ app.post("/auth/register", async (req, res) => {
       return res.status(400).json({ error: "Usuário já existe" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashedPassword });
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1d' });
-    res.status(201).json({ token, name: user.name });
+    const user = await User.create({ name, email, password: hashedPassword, role: 'client' });
+    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1d' });
+    res.status(201).json({ token, name: user.name, role: user.role });
   } catch (error) {
     res.status(500).json({ error: String(error) });
   }
@@ -66,8 +66,8 @@ app.post("/auth/login", async (req, res) => {
     if (!isPasswordValid) {
       return res.status(400).json({ error: "Email ou senha inválidos" });
     }
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1d' });
-    res.json({ token, name: user.name });
+    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1d' });
+    res.json({ token, name: user.name, role: user.role });
   } catch (error) {
     res.status(500).json({ error: String(error) });
   }
@@ -103,20 +103,101 @@ app.post("/products", upload.single("photo"), async (req, res) => {
   }
 })
 
-app.get("/products/:code", async (req, res) => {
+
+// Admin guard middleware (real implementation)
+const adminGuard = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ error: "Token não fornecido" });
+
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    if (decoded.role !== 'admin') {
+      return res.status(403).json({ error: "Acesso negado: Apenas administradores" });
+    }
+    req.userId = decoded.id;
+    next();
+  } catch (error) {
+    return res.status(401).json({ error: "Token inválido ou expirado" });
+  }
+};
+
+// Seed default admin
+const seedAdmin = async () => {
+  const adminEmail = 'admin@gestock.com';
+  const exists = await User.findOne({ email: adminEmail });
+  if (!exists) {
+    const hashedPassword = await bcrypt.hash('admin123', 10);
+    await User.create({
+      name: 'Administrador Gestock',
+      email: adminEmail,
+      password: hashedPassword,
+      role: 'admin'
+    });
+    console.log('✅ Usuário Admin padrão criado: admin@gestock.com / admin123');
+  }
+};
+seedAdmin();
+
+// Admin: Create other users (including other admins)
+app.post("/admin/users", adminGuard, async (req, res) => {
+  try {
+    const { name, email, password, role } = req.body;
+    if (!name || !email || !password || !role) {
+      return res.status(400).json({ error: "Todos os campos são obrigatórios" });
+    }
+    const userExists = await User.findOne({ email });
+    if (userExists) return res.status(400).json({ error: "Usuário já existe" });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create({ name, email, password: hashedPassword, role });
+    res.status(201).json({ message: "Usuário criado com sucesso", user: { id: user._id, name, email, role } });
+  } catch (error) {
+    res.status(500).json({ error: String(error) });
+  }
+});
+
+// Serve uploaded images statically
+app.use('/uploads', express.static('uploads'));
+
+// Update product endpoint: PATCH (admin only)
+app.patch("/products/:code", adminGuard, upload.single("photo"), async (req, res) => {
   try {
     const { code } = req.params;
-    const product = await Product.findByCode(code)
-
+    const product = await Product.findByCode(code);
     if (!product) {
       return res.status(404).json({ error: "Produto não encontrado" });
     }
-
+    // Update fields from body
+    Object.keys(req.body).forEach(field => {
+      product[field] = req.body[field];
+    });
+    // Update photo if provided
+    if (req.file) {
+      product.photo = req.file.path;
+    }
+    await product.save();
     res.json(product);
   } catch (error) {
-    res.status(500).json({ error })
+    res.status(500).json({ error: String(error) });
   }
 });
+
+// Delete product endpoint (admin only)
+app.delete("/products/:code", adminGuard, async (req, res) => {
+  try {
+    const { code } = req.params;
+    const product = await Product.findByCode(code);
+    if (!product) {
+      return res.status(404).json({ error: "Produto não encontrado" });
+    }
+    await product.remove();
+    res.json({ message: "Produto removido" });
+  } catch (error) {
+    res.status(500).json({ error: String(error) });
+  }
+});
+
 
 app.get("/products", async (req, res) => {
   try {
@@ -127,30 +208,7 @@ app.get("/products", async (req, res) => {
   }
 })
 
-app.patch("/products/:code", upload.single("photo"), async (req, res) => {
-  try {
-    const { code } = req.params
-    const product = await Product.findByCode(code)
 
-    if (!product) {
-      return res.status(404).json({ error: "Produto não encontrado" })
-    }
-
-    Object.keys(req.body).forEach(field => {
-      product[field] = req.body[field]
-    });
-
-    if (req.file) {
-      product.photo = req.file.path
-    }
-
-    await product.save()
-
-    res.json(product)
-  } catch (error) {
-    res.status(500).json({ error: `${error}` })
-  }
-})
 
 app.post("/orders", async (req, res) => {
   try {

@@ -1,24 +1,25 @@
 <!-- navbar.component.html -->
-<nav class="navbar is-light">
+<nav class="navbar">
   <div class="navbar-brand">
-    <!-- Logo -->
-    <a class="navbar-item" href="#">
-      <img src="/images/Logo.svg" alt="Logo" height="40">
+    <a routerLink="/admin">
+      <img src="/images/Logo.svg" alt="Gestock Logo">
     </a>
   </div>
 
-  <div class="navbar-end">
-    <!-- Avatar do usuário -->
+  <div class="navbar-end ms-auto">
     <div class="navbar-item has-dropdown is-hoverable">
-      <a class="navbar-link">
-        <figure class="is-32x32">
-          <img class="is-rounded" src="/images/download.png" alt="User Avatar">
-        </figure>
-      </a>
+      <div class="user-profile">
+        <img class="avatar" src="/images/download.png" alt="User Avatar">
+        <div class="user-info d-none d-md-flex">
+          <span>Administrador</span>
+          <small>Gestock Team</small>
+        </div>
+        <i class="fas fa-chevron-down ms-2 small text-muted"></i>
+      </div>
 
       <div class="navbar-dropdown is-right">
         <a class="navbar-item" (click)="logout()">
-          <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+          <i class="fas fa-sign-out-alt"></i>
           <span>Log Out</span>
         </a>
       </div>
