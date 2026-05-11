@@ -1,15 +1,114 @@
 .navbar {
-  .image.is-32x32 img {
-    cursor: pointer;
-    border-radius: 50%;
-    height: 50%;
-    width: 50%;
-  
+  height: 70px;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  z-index: 1010;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 
+  .navbar-brand {
+    a {
+      display: flex;
+      align-items: center;
+      img {
+        height: 36px;
+        transition: transform 0.3s ease;
+      }
+      &:hover img { transform: scale(1.05); }
+    }
+  }
+
+  .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #f1f5f9;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 2px solid #e2e8f0;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+
+      span {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #1e293b;
+      }
+      small {
+        font-size: 0.75rem;
+        color: #64748b;
+      }
+    }
   }
 
   .navbar-dropdown {
-    border-radius: 6px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    position: absolute;
+    top: 100%;
+    right: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    padding: 0.5rem;
+    min-width: 160px;
+    display: none; // Default hidden, handled by Bulma's hoverable or custom logic
+
+    &.is-visible { display: block; } // Example class
+
+    .navbar-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      color: #475569;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #f8fafc;
+        color: #ef4444; // Logout color
+      }
+
+      i { font-size: 1rem; }
+    }
   }
+
+  // Bulma-like hover logic if needed, or we can use a simpler approach
+  .has-dropdown:hover .navbar-dropdown {
+    display: block;
+    animation: slideDown 0.2s ease-out;
+  }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
