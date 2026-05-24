@@ -2,9 +2,9 @@
 
     <label [for]="inputName">{{ label }}</label>
 
-    <div class="input-content">
-        <input [type]="type" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" />
+    <div class="input-content" [class.has-error]="hasError">
+        <input [type]="type" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" (blur)="onTouched()" />
     </div>
 
-
+    <span class="error-msg text-danger small mt-1" *ngIf="hasError">{{ errorMsg }}</span>
 </div>

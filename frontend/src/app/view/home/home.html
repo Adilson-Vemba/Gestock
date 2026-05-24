@@ -16,7 +16,7 @@
         </div>
         <div class="stat-info">
           <h3>Vendas Totais</h3>
-          <div class="value">{{ statsData?.totalSales || 0 | currency:'MZN' }}</div>
+          <div class="value">{{ statsData?.totalSales || 0 | number:'1.2-2' }} MT</div>
         </div>
       </div>
 
@@ -26,7 +26,7 @@
         </div>
         <div class="stat-info">
           <h3>Compras Efetuadas</h3>
-          <div class="value">{{ statsData?.totalPurchases || 0 | currency:'MZN' }}</div>
+          <div class="value">{{ statsData?.totalPurchases || 0 | number:'1.2-2' }} MT</div>
         </div>
       </div>
 

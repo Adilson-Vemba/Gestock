@@ -34,7 +34,7 @@
               <div class="fw-bold">{{ product.name }}</div>
             </td>
             <td><code>{{ product.code }}</code></td>
-            <td class="fw-bold">{{ product.price | currency:'MZN' }}</td>
+            <td class="fw-bold">{{ product.price | number:'1.2-2' }}</td>
             <td>
               <span class="badge rounded-pill badge-stock" 
                     [ngClass]="{'bg-success-subtle text-success': product.quantity > 10, 'bg-warning-subtle text-warning': product.quantity <= 10 && product.quantity > 0, 'bg-danger-subtle text-danger': product.quantity <= 0}">
@@ -105,7 +105,7 @@
       <div class="modal-actions">
         <button type="button" class="btn btn-light rounded-pill px-4" (click)="fecharModal()">Cancelar</button>
         <button type="submit" class="btn btn-primary rounded-pill px-4" [disabled]="productForm.invalid">
-          {{ editingProduct ? 'Salvar Alterações' : 'Criat Produto' }}
+          {{ editingProduct ? 'Salvar Alterações' : 'Criar Produto' }}
         </button>
       </div>
     </form>

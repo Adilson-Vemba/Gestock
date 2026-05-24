@@ -5,6 +5,7 @@ import { Menu } from '../../components/menu/menu';
 import { OrderService } from '../../services/order';
 import { ProductService } from '../../services/product';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-venda',
@@ -35,7 +36,8 @@ export class Venda implements OnInit {
 
   constructor(
     private orderService: OrderService,
-    private productService: ProductService
+    private productService: ProductService,
+    private notify: NotificationService
   ) {
     this.vendaForm = new FormGroup({
       productCode: new FormControl('', [Validators.required]),
@@ -94,19 +96,19 @@ export class Venda implements OnInit {
 
     this.orderService.createOrder(orderData).subscribe({
       next: () => {
-        alert('Venda realizada com sucesso!');
+        this.notify.success('Venda realizada com sucesso!');
         this.fecharModal();
         this.carregarVendas();
       },
       error: (err) => {
-        alert('Erro ao realizar venda: ' + (err.error?.error || 'Erro desconhecido'));
+        this.notify.error('Erro ao realizar venda: ' + (err.error?.error || 'Erro desconhecido'));
         console.error(err);
       }
     });
   }
 
   filtrar() {
-    alert('Filtro de vendas clicado');
+    this.notify.info('Filtro de vendas clicado');
   }
 
   verDetalhes(sale: any) {
@@ -115,7 +117,7 @@ export class Venda implements OnInit {
   }
 
   verFatura(sale: any) {
-    alert(`Gerando fatura para a venda ${sale.id || sale._id}`);
+    this.notify.info(`Gerando fatura para a venda ${sale.id || sale._id}`);
   }
 
 }

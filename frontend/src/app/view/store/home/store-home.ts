@@ -5,6 +5,7 @@ import { ProductService } from '../../../services/product';
 import { CartService, CartItem } from '../../../services/cart.service';
 import { AuthService } from '../../../services/auth';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-store-home',
@@ -18,6 +19,7 @@ export class StoreHome implements OnInit {
   private cartService = inject(CartService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private notify = inject(NotificationService);
 
   products: any[] = [];
   topSellers: any[] = [];
@@ -66,7 +68,7 @@ export class StoreHome implements OnInit {
 
   addToCart(product: any) {
     if (!this.isLoggedIn) {
-      alert('Por favor, faça login para realizar compras.');
+      this.notify.warning('Por favor, faça login para realizar compras.');
       this.router.navigate(['/login']);
       return;
     }
@@ -80,6 +82,6 @@ export class StoreHome implements OnInit {
       photo: product.photo
     };
     this.cartService.addItem(item);
-    alert('Produto adicionado ao carrinho!');
+    this.notify.success('Produto adicionado ao carrinho!');
   }
 }

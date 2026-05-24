@@ -32,7 +32,7 @@
           <h1 class="display-5 fw-bold mb-3">{{ product.name }}</h1>
           <p class="text-muted mb-4">Código do Produto: {{ product.code }}</p>
           
-          <h2 class="text-primary display-6 fw-bold mb-4">{{ product.price | currency:'MZN' }}</h2>
+          <h2 class="text-primary display-6 fw-bold mb-4">{{ product.price | number:'1.2-2' }} MT</h2>
           
           <div class="stock-status mb-4">
             <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill" *ngIf="product.quantity > 0">

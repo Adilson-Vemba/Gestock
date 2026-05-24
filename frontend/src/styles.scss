@@ -66,6 +66,17 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0.5rem;
 }
 
+h1.page-title, .h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  background: linear-gradient(135deg, #0f172a 0%, #4f46e5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.25rem;
+}
+
 p {
   color: var(--text-muted);
 }
@@ -129,4 +140,65 @@ p {
 .hover-lift:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
+}
+
+/* Global Modal Styles */
+.custom-modal, .modal-overlay {
+  display: flex;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
+
+  .modal-content, .modal-card {
+    background-color: white;
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 500px;
+    box-shadow: var(--shadow-lg);
+    max-height: 90vh;
+    overflow-y: auto;
+
+    h2, h3 {
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      h2, h3 { margin-bottom: 0; }
+      .btn-close {
+        background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--text-muted);
+        &:hover { color: var(--danger); }
+      }
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        font-size: 0.875rem;
+      }
+    }
+
+    .modal-actions, .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+  }
 }

@@ -17,12 +17,12 @@
 
       <div class="summary-card box hover-lift">
         <span>Receita Acumulada</span>
-        <strong>{{ statsData?.totalRevenue || 0 | currency:'MZN' }}</strong>
+        <strong>{{ statsData?.totalRevenue || 0 | number:'1.2-2' }} MT</strong>
       </div>
 
       <div class="summary-card box hover-lift">
         <span>Investimento Total</span>
-        <strong>{{ statsData?.totalSpent || 0 | currency:'MZN' }}</strong>
+        <strong>{{ statsData?.totalSpent || 0 | number:'1.2-2' }} MT</strong>
       </div>
     </section>
 

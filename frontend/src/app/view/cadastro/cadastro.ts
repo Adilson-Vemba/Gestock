@@ -4,6 +4,7 @@ import { DefaultLoginLayout } from '../../components/default-login-layout/defaul
 import { PrimaryInput } from '../../components/primary-input/primary-input';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
+import { NotificationService } from '../../services/notification.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -25,23 +26,34 @@ export class Cadastro {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private notify: NotificationService
   ) { }
 
   submit() {
-    if (this.cadastroForm.invalid) return;
+    if (this.cadastroForm.invalid) {
+      this.cadastroForm.markAllAsTouched();
+      this.notify.warning('Por favor, preencha todos os campos corretamente.');
+      return;
+    }
 
     const { confirmarSenha, nome, senha, email } = this.cadastroForm.value;
+    
+    if (senha !== confirmarSenha) {
+      this.notify.error('As senhas não coincidem!');
+      return;
+    }
+    
     const data = { name: nome, password: senha, email };
 
     this.authService.register(data)
       .subscribe({
         next: () => {
-          alert('Conta criada com sucesso');
+          this.notify.success('Conta criada com sucesso!');
           this.router.navigate(['/login']);
         },
-        error: () => {
-          alert('Erro ao criar conta');
+        error: (err) => {
+          this.notify.error(err.error?.error || 'Erro ao criar conta');
         }
       });
   }

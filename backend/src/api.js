@@ -77,10 +77,10 @@ Product.findByCode = (code) => {
   return Product.findOne({ code: code });
 };
 
-app.post("/products", upload.single("photo"), async (req, res) => {
+app.post("/products", adminGuard, upload.single("photo"), async (req, res) => {
   try {
     const { name, price, quantity: productQuantity } = req.body
-    const photoPath = req.file ? req.file.path : null
+    const photoPath = req.file ? req.file.path.replace(/\\/g, '/') : null
 
     if (!name || !price) {
       return res.status(400).json({ error: "Nome e preço são obrigatórios" })
@@ -115,7 +115,7 @@ app.get("/products/top-sellers", async (req, res) => {
 
 
 // Admin guard middleware (real implementation)
-const adminGuard = (req, res, next) => {
+function adminGuard(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ error: "Token não fornecido" });
 
@@ -184,7 +184,7 @@ app.patch("/products/:code", adminGuard, upload.single("photo"), async (req, res
     });
     // Update photo if provided
     if (req.file) {
-      product.photo = req.file.path;
+      product.photo = req.file.path.replace(/\\/g, '/');
     }
     await product.save();
     res.json(product);

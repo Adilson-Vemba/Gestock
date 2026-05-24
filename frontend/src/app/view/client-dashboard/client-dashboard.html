@@ -83,7 +83,7 @@
           <div class="product-body">
             <h3>{{ product.name }}</h3>
             <div class="product-meta">
-              <span class="product-price">{{ product.price | currency:'MZN':'symbol':'1.0-0' }}</span>
+              <span class="product-price">{{ product.price | number:'1.2-2' }} MT</span>
               <span class="product-stock" [class.low]="product.quantity < 5">
                 <i class="fas fa-circle"></i>
                 {{ product.quantity > 0 ? product.quantity + ' em stock' : 'Esgotado' }}

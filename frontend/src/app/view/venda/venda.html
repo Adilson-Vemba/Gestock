@@ -28,12 +28,12 @@
 
       <div class="summary-card box hover-lift">
         <span>Receita Total</span>
-        <strong>{{ totalRevenue | currency:'MZN' }}</strong>
+        <strong>{{ totalRevenue | number:'1.2-2' }} MT</strong>
       </div>
 
       <div class="summary-card box hover-lift">
         <span>Vendas Hoje</span>
-        <strong>{{ todayRevenue | currency:'MZN' }}</strong>
+        <strong>{{ todayRevenue | number:'1.2-2' }} MT</strong>
       </div>
     </section>
 
@@ -64,7 +64,7 @@
                 </div>
               </div>
             </td>
-            <td class="fw-bold">{{ sale.total || 0 | currency:'MZN' }}</td>
+            <td class="fw-bold">{{ sale.total || 0 | number:'1.2-2' }} MT</td>
             <td>
               <div class="d-flex align-items-center">
                 <div class="avatar-sm me-2 bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">
@@ -159,7 +159,7 @@
             <tr *ngFor="let item of selectedSale.products">
               <td>{{ $any(item).product?.name }}</td>
               <td class="text-center">{{ $any(item).quantity }}</td>
-              <td class="text-end">{{ ($any(item).product?.price * $any(item).quantity) | currency:'MZN' }}</td>
+              <td class="text-end">{{ ($any(item).product?.price * $any(item).quantity) | number:'1.2-2' }} MT</td>
             </tr>
           </tbody>
         </table>
@@ -167,7 +167,7 @@
 
       <div class="d-flex justify-content-between align-items-center">
         <span class="h5 mb-0">Total</span>
-        <span class="h4 mb-0 fw-bold text-primary">{{ selectedSale.total || 0 | currency:'MZN' }}</span>
+        <span class="h4 mb-0 fw-bold text-primary">{{ selectedSale.total || 0 | number:'1.2-2' }} MT</span>
       </div>
     </div>
 

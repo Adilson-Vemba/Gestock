@@ -5,6 +5,7 @@ import { ProductService } from '../../../services/product';
 import { CartService, CartItem } from '../../../services/cart.service';
 import { AuthService } from '../../../services/auth';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -23,7 +24,8 @@ export class ProductDetail implements OnInit {
     private productService: ProductService,
     private cartService: CartService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private notify: NotificationService
   ) {}
 
   ngOnInit() {
@@ -53,7 +55,7 @@ export class ProductDetail implements OnInit {
 
   addToCart() {
     if (!this.authService.isLoggedIn()) {
-      alert('Por favor, faça login para realizar compras.');
+      this.notify.warning('Por favor, faça login para realizar compras.');
       this.router.navigate(['/login']);
       return;
     }
@@ -68,6 +70,6 @@ export class ProductDetail implements OnInit {
       photo: this.product.photo
     };
     this.cartService.addItem(item);
-    alert('Produto adicionado ao carrinho!');
+    this.notify.success('Produto adicionado ao carrinho!');
   }
 }

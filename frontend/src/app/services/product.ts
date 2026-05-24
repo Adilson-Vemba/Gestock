@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,6 +9,13 @@ export class ProductService {
     private API_URL = 'http://localhost:8080/products';
 
     constructor(private http: HttpClient) { }
+
+    private getHeaders(): HttpHeaders {
+        const token = localStorage.getItem('token');
+        return new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
+    }
 
     getProducts(): Observable<any[]> {
         return this.http.get<any[]>(this.API_URL);
@@ -23,14 +30,14 @@ export class ProductService {
     }
 
     createProduct(product: any): Observable<any> {
-        return this.http.post<any>(this.API_URL, product);
+        return this.http.post<any>(this.API_URL, product, { headers: this.getHeaders() });
     }
 
     updateProduct(code: string, product: any): Observable<any> {
-        return this.http.patch<any>(`${this.API_URL}/${code}`, product);
+        return this.http.patch<any>(`${this.API_URL}/${code}`, product, { headers: this.getHeaders() });
     }
 
     deleteProduct(code: string): Observable<any> {
-        return this.http.delete<any>(`${this.API_URL}/${code}`);
+        return this.http.delete<any>(`${this.API_URL}/${code}`, { headers: this.getHeaders() });
     }
 }

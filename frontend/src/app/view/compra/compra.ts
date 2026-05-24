@@ -6,6 +6,7 @@ import { SupplierService } from '../../services/supplier';
 import { ProductService } from '../../services/product';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { OnInit } from '@angular/core';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-compra',
@@ -37,7 +38,8 @@ export class Compra implements OnInit {
 
   constructor(
     private supplierService: SupplierService,
-    private productService: ProductService
+    private productService: ProductService,
+    private notify: NotificationService
   ) {
     this.compraForm = new FormGroup({
       supplierId: new FormControl('', [Validators.required]),
@@ -96,11 +98,12 @@ export class Compra implements OnInit {
 
     this.supplierService.createRequest(supplierId, products).subscribe({
       next: () => {
+        this.notify.success('Pedido de compra enviado com sucesso!');
         this.fecharModal();
         this.carregarHistorico();
       },
       error: (err) => {
-        alert('Erro ao enviar pedido: ' + (err.error?.error || 'Erro desconhecido'));
+        this.notify.error('Erro ao enviar pedido: ' + (err.error?.error || 'Erro desconhecido'));
         console.error(err);
       }
     });
@@ -136,11 +139,12 @@ export class Compra implements OnInit {
 
     this.supplierService.createSupplier(this.supplierForm.value).subscribe({
       next: () => {
+        this.notify.success('Fornecedor criado com sucesso!');
         this.fecharModalFornecedor();
         this.carregarFornecedores();
       },
       error: (err) => {
-        alert('Erro ao criar fornecedor: ' + (err.error?.error || 'Erro desconhecido'));
+        this.notify.error('Erro ao criar fornecedor: ' + (err.error?.error || 'Erro desconhecido'));
         console.error(err);
       }
     });
@@ -150,9 +154,12 @@ export class Compra implements OnInit {
     if (!confirm('Tem a certeza que quer eliminar este fornecedor?')) return;
 
     this.supplierService.deleteSupplier(id).subscribe({
-      next: () => this.carregarFornecedores(),
+      next: () => {
+        this.notify.success('Fornecedor eliminado.');
+        this.carregarFornecedores();
+      },
       error: (err) => {
-        alert('Erro ao eliminar fornecedor: ' + (err.error?.error || 'Erro desconhecido'));
+        this.notify.error('Erro ao eliminar fornecedor: ' + (err.error?.error || 'Erro desconhecido'));
         console.error(err);
       }
     });

@@ -4,6 +4,8 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { Navbar } from '../../components/navbar/navbar';
 import { Menu } from '../../components/menu/menu';
 import { ProductService } from '../../services/product';
+import { NotificationService } from '../../services/notification.service';
+
 
 @Component({
   selector: 'app-inventario',
@@ -21,7 +23,8 @@ export class Inventario implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private notify: NotificationService
   ) {
     this.productForm = this.fb.group({
       name: ['', Validators.required],
@@ -38,7 +41,7 @@ export class Inventario implements OnInit {
   carregarProdutos() {
     this.productService.getProducts().subscribe({
       next: (data) => this.products = data,
-      error: (err) => console.error('Erro ao carregar produtos:', err)
+      error: (err) => this.notify.error('Erro ao carregar produtos.')
     });
   }
 
@@ -81,18 +84,20 @@ export class Inventario implements OnInit {
     if (this.editingProduct) {
       this.productService.updateProduct(this.editingProduct.code || this.editingProduct._id, formData).subscribe({
         next: () => {
+          this.notify.success('Produto atualizado com sucesso!');
           this.carregarProdutos();
           this.fecharModal();
         },
-        error: (err) => alert('Erro ao atualizar produto')
+        error: (err) => this.notify.error('Erro ao atualizar produto')
       });
     } else {
       this.productService.createProduct(formData).subscribe({
         next: () => {
+          this.notify.success('Produto criado com sucesso!');
           this.carregarProdutos();
           this.fecharModal();
         },
-        error: (err) => alert('Erro ao criar produto')
+        error: (err) => this.notify.error('Erro ao criar produto')
       });
     }
   }
@@ -100,8 +105,11 @@ export class Inventario implements OnInit {
   eliminarProduto(product: any) {
     if (confirm(`Tem a certeza que deseja eliminar o produto ${product.name}?`)) {
       this.productService.deleteProduct(product.code || product._id).subscribe({
-        next: () => this.carregarProdutos(),
-        error: (err) => alert('Erro ao eliminar produto')
+        next: () => {
+          this.notify.success('Produto eliminado!');
+          this.carregarProdutos();
+        },
+        error: (err) => this.notify.error('Erro ao eliminar produto')
       });
     }
   }
@@ -111,6 +119,7 @@ export class Inventario implements OnInit {
     if (quantity && !isNaN(Number(quantity))) {
       const newQuantity = (product.quantity || 0) + Number(quantity);
       this.productService.updateProduct(product.code || product._id, { quantity: newQuantity }).subscribe(() => {
+        this.notify.success('Estoque atualizado!');
         this.carregarProdutos();
       });
     }

@@ -3,10 +3,12 @@ import { ReactiveFormsModule, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@a
 
 type InputTypes = 'text' | 'email' | 'password' | 'number';
 
+import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-primary-input',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './primary-input.html',
   styleUrl: './primary-input.scss',
   providers: [
@@ -23,6 +25,8 @@ export class PrimaryInput implements ControlValueAccessor {
   @Input() placeholder: string = '';
   @Input() label: string = '';
   @Input() inputName: string = '';
+  @Input() hasError: boolean = false;
+  @Input() errorMsg: string = '';
 
   value: string = ''
   onChange: any = () => { }
