@@ -201,7 +201,7 @@ app.delete("/products/:code", adminGuard, async (req, res) => {
     if (!product) {
       return res.status(404).json({ error: "Produto não encontrado" });
     }
-    await product.remove();
+    await Product.deleteOne({ code: product.code });
     res.json({ message: "Produto removido" });
   } catch (error) {
     res.status(500).json({ error: String(error) });

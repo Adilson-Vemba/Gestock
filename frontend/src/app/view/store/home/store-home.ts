@@ -56,7 +56,10 @@ export class StoreHome implements OnInit {
   loadProducts() {
     this.productService.getTopSellers().subscribe({
       next: (data) => {
-        this.topSellers = data;
+        this.topSellers = data.map(p => {
+          if (p.photo) p.photo = p.photo.replace(/\\/g, '/');
+          return p;
+        });
         this.loading = false;
       },
       error: (err) => {

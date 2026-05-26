@@ -62,6 +62,40 @@
           }
         }
 
+        .menu-label {
+          position: absolute;
+          left: 60px;
+          background-color: #1e293b;
+          color: white;
+          padding: 6px 12px;
+          border-radius: 6px;
+          font-size: 0.875rem;
+          font-weight: 500;
+          white-space: nowrap;
+          opacity: 0;
+          visibility: hidden;
+          transition: all 0.2s ease;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          pointer-events: none;
+          
+          &::before {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 4px 4px 4px 0;
+            border-style: solid;
+            border-color: transparent #1e293b transparent transparent;
+          }
+        }
+
+        &:hover .menu-label {
+          opacity: 1;
+          visibility: visible;
+          left: 65px;
+        }
+
         &.store-link {
           color: #10b981;
           &:hover {

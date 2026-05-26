@@ -38,6 +38,9 @@ export class ProductDetail implements OnInit {
   loadProduct(code: string) {
     this.productService.getProduct(code).subscribe({
       next: (data) => {
+        if (data && data.photo) {
+          data.photo = data.photo.replace(/\\/g, '/');
+        }
         this.product = data;
         this.loading = false;
       },

@@ -29,7 +29,7 @@ export class Inventario implements OnInit {
     this.productForm = this.fb.group({
       name: ['', Validators.required],
       price: ['', [Validators.required, Validators.min(0.01)]],
-      quantity: [0, Validators.min(0)],
+      quantity: [1, Validators.min(1)],
       code: ['']
     });
   }
@@ -40,7 +40,12 @@ export class Inventario implements OnInit {
 
   carregarProdutos() {
     this.productService.getProducts().subscribe({
-      next: (data) => this.products = data,
+      next: (data) => {
+        this.products = data.map(p => {
+          if (p.photo) p.photo = p.photo.replace(/\\/g, '/');
+          return p;
+        });
+      },
       error: (err) => this.notify.error('Erro ao carregar produtos.')
     });
   }
@@ -55,7 +60,7 @@ export class Inventario implements OnInit {
         code: product.code
       });
     } else {
-      this.productForm.reset({ quantity: 0 });
+      this.productForm.reset({ quantity: 1 });
     }
     this.showModal = true;
   }

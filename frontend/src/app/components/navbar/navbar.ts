@@ -18,12 +18,19 @@ export class Navbar {
     private authService: AuthService
   ) { 
     this.router.events.subscribe(() => {
-      const path = this.router.url.split('/')[1] || '';
-      switch(path) {
+      const segments = this.router.url.split('/').filter(Boolean);
+      // Determine page title based on route hierarchy
+      let titleKey = '';
+      if (segments[0] === 'admin') {
+        titleKey = segments[1] || '';
+      } else {
+        titleKey = segments[0] || '';
+      }
+      switch (titleKey) {
         case 'admin': this.pageTitle = 'Dashboard'; break;
         case 'inventario': this.pageTitle = 'Gestão de Inventário'; break;
-        case 'compras': this.pageTitle = 'Compras / Entradas'; break;
-        case 'vendas': this.pageTitle = 'Histórico de Vendas'; break;
+        case 'compra': this.pageTitle = 'Compras / Entradas'; break;
+        case 'venda': this.pageTitle = 'Histórico de Vendas'; break;
         case 'relatorio': this.pageTitle = 'Relatórios Financeiros'; break;
         default: this.pageTitle = 'Gestock';
       }

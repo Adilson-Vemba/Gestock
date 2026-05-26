@@ -2,33 +2,39 @@
 <aside class="menu-sidebar">
   <ul class="menu-list">
     <li>
-      <a routerLink="/admin" routerLinkActive="is-active" [routerLinkActiveOptions]="{exact: true}" title="Dashboard Administrativo">
+      <a routerLink="/admin" routerLinkActive="is-active" [routerLinkActiveOptions]="{exact: true}">
         <span class="icon"><i class="fas fa-home"></i></span>
+        <span class="menu-label">Dashboard</span>
       </a>
     </li>
     <li>
-      <a routerLink="/admin/compra" routerLinkActive="is-active" title="Gestão de Compras e Fornecedores">
+      <a routerLink="/admin/compra" routerLinkActive="is-active">
         <span class="icon"><i class="fas fa-truck-loading"></i></span>
+        <span class="menu-label">Compras</span>
       </a>
     </li>
     <li>
-      <a routerLink="/admin/venda" routerLinkActive="is-active" title="Ponto de Venda e Facturação">
+      <a routerLink="/admin/venda" routerLinkActive="is-active">
         <span class="icon"><i class="fas fa-dollar-sign"></i></span>
+        <span class="menu-label">Vendas</span>
       </a>
     </li>
     <li>
-      <a routerLink="/admin/inventario" routerLinkActive="is-active" title="Controle de Stock e Produtos">
+      <a routerLink="/admin/inventario" routerLinkActive="is-active">
         <span class="icon"><i class="fas fa-boxes"></i></span>
+        <span class="menu-label">Inventário</span>
       </a>
     </li>
     <li>
-      <a routerLink="/admin/relatorio" routerLinkActive="is-active" title="Relatórios e Estatísticas">
+      <a routerLink="/admin/relatorio" routerLinkActive="is-active">
         <span class="icon"><i class="fas fa-chart-line"></i></span>
+        <span class="menu-label">Relatórios</span>
       </a>
     </li>
     <li class="mt-auto">
-      <a routerLink="/dashboard" title="Ver Loja (Visão do Cliente)" class="store-link">
+      <a routerLink="/dashboard" class="store-link">
         <span class="icon"><i class="fas fa-store"></i></span>
+        <span class="menu-label">Loja</span>
       </a>
     </li>
   </ul>
