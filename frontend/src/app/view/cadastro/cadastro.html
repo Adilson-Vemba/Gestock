@@ -3,25 +3,25 @@
 
   <form [formGroup]="cadastroForm">
     <app-primary-input label="Nome" formControlName="nome" inputName="nome" placeholder="Seu nome"
-      [hasError]="cadastroForm.get('nome')?.invalid && cadastroForm.get('nome')?.touched"
+      [hasError]="!!(cadastroForm.get('nome')?.invalid && cadastroForm.get('nome')?.touched)"
       errorMsg="O nome é obrigatório">
     </app-primary-input>
     
     <app-primary-input label="Email" type="email" formControlName="email" inputName="email"
       placeholder="Seu email"
-      [hasError]="cadastroForm.get('email')?.invalid && cadastroForm.get('email')?.touched"
+      [hasError]="!!(cadastroForm.get('email')?.invalid && cadastroForm.get('email')?.touched)"
       errorMsg="Um email válido é obrigatório">
     </app-primary-input>
     
     <app-primary-input label="Senha" type="password" formControlName="senha" inputName="senha"
       placeholder="Senha"
-      [hasError]="cadastroForm.get('senha')?.invalid && cadastroForm.get('senha')?.touched"
+      [hasError]="!!(cadastroForm.get('senha')?.invalid && cadastroForm.get('senha')?.touched)"
       errorMsg="A senha deve ter pelo menos 6 caracteres">
     </app-primary-input>
     
     <app-primary-input label="Confirmar Senha" type="password" formControlName="confirmarSenha"
       inputName="confirmarSenha" placeholder="Confirmar senha"
-      [hasError]="cadastroForm.get('confirmarSenha')?.invalid && cadastroForm.get('confirmarSenha')?.touched"
+      [hasError]="!!(cadastroForm.get('confirmarSenha')?.invalid && cadastroForm.get('confirmarSenha')?.touched)"
       errorMsg="A confirmação de senha é obrigatória">
     </app-primary-input>
   </form>

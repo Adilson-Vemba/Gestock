@@ -25,7 +25,7 @@ export class PrimaryInput implements ControlValueAccessor {
   @Input() placeholder: string = '';
   @Input() label: string = '';
   @Input() inputName: string = '';
-  @Input() hasError: boolean = false;
+  @Input() hasError: boolean | null | undefined = false;
   @Input() errorMsg: string = '';
 
   value: string = ''

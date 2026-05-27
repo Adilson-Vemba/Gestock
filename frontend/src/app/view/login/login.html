@@ -3,13 +3,13 @@
   <form [formGroup]="loginForm">
     <app-primary-input label="Seu Email" type="email" formControlName="email" inputName="email"
       placeholder="Email"
-      [hasError]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+      [hasError]="!!(loginForm.get('email')?.invalid && loginForm.get('email')?.touched)"
       errorMsg="Um email válido é obrigatório">
     </app-primary-input>
 
     <app-primary-input label="Sua Senha" type="password" formControlName="password" inputName="password"
       placeholder="Senha"
-      [hasError]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+      [hasError]="!!(loginForm.get('password')?.invalid && loginForm.get('password')?.touched)"
       errorMsg="A senha é obrigatória (min. 6 caracteres)">
     </app-primary-input>
   </form>

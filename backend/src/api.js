@@ -418,6 +418,8 @@ app.get("/suppliers/history", async (req, res) => {
     const { status } = req.query
     const supplierRequests = await SupplierRequest
       .find(status ? { status: status.toUpperCase() } : {})
+      .populate("supplier")
+      .populate("products.product")
       .sort({ createdAt: -1 })
 
     res.json({ supplierRequests })

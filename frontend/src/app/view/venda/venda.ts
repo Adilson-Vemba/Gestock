@@ -108,7 +108,7 @@ export class Venda implements OnInit {
   }
 
   filtrar() {
-    this.notify.info('Filtro de vendas clicado');
+    this.notify.success('Filtro de vendas clicado');
   }
 
   verDetalhes(sale: any) {
@@ -117,7 +117,7 @@ export class Venda implements OnInit {
   }
 
   verFatura(sale: any) {
-    this.notify.info(`Gerando fatura para a venda ${sale.id || sale._id}`);
+    this.notify.success(`Gerando fatura para a venda ${sale.id || sale._id}`);
   }
 
 }
