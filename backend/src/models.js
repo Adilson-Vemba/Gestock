@@ -28,6 +28,7 @@ const productSchema = new Schema({
     code: { type: Schema.Types.ObjectId, auto: true },
     name: { type: String, required: true },
     price: { type: Number, required: true },
+    category: { type: String, default: 'Geral' },
     photo: { type: String },
     quantity: { type: Number, default: 0 },
     isDeleted: { type: Boolean, default: false }

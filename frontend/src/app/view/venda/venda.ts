@@ -62,7 +62,13 @@ export class Venda implements OnInit {
   carregarVendas() {
     this.orderService.getOrders().subscribe({
       next: (data) => {
-        this.sales = data.orders || [];
+        this.sales = (data.orders || []).map((sale: any) => {
+          const total = sale.products.reduce((acc: number, item: any) => {
+            const price = item.product?.price || 0;
+            return acc + (price * item.quantity);
+          }, 0);
+          return { ...sale, total };
+        });
       },
       error: (err) => {
         console.error('Erro ao carregar vendas:', err);

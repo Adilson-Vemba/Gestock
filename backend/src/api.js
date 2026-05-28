@@ -19,7 +19,7 @@ if (!fs.existsSync(UPLOAD_PATH)) fs.mkdirSync(UPLOAD_PATH, { recursive: true });
 const uploadDir = path.resolve("uploads");
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadDir),
+  destination: (req, file, cb) => cb(null, 'uploads/'),
   filename: (req, file, cb) => {
     cb(null, `${Date.now()} - ${file.originalname}`)
   }
@@ -74,28 +74,31 @@ app.post("/auth/login", async (req, res) => {
 });
 
 Product.findByCode = (code) => {
-  return Product.findOne({ code: code });
+  const query = [{ code: code }];
+  if (code && code.length === 24) {
+    query.push({ _id: code });
+  }
+  return Product.findOne({ $or: query });
 };
 
 app.post("/products", adminGuard, upload.single("photo"), async (req, res) => {
   try {
-    const { name, price, quantity: productQuantity } = req.body
-    const photoPath = req.file ? req.file.path.replace(/\\/g, '/') : null
+    const { name, price, quantity: productQuantity } = req.body;
+    // Ensure numeric values for price and quantity
+    const priceNum = Number(price);
+    const quantityNum = productQuantity !== undefined ? Number(productQuantity) : 0;
+    const photoPath = req.file ? req.file.path.replace(/\\/g, '/') : null;
 
-    if (!name || !price) {
-      return res.status(400).json({ error: "Nome e preço são obrigatórios" })
-    }
-
-    if (price <= 0) {
-      return res.status(400).json({ error: "Preço deve ser maior que 0" })
+    if (!name || isNaN(priceNum) || priceNum <= 0) {
+      return res.status(400).json({ error: "Nome e preço válidos são obrigatórios" });
     }
 
     const product = await Product.create({
       name,
-      price,
-      quantity: productQuantity ? productQuantity : 0,
+      price: priceNum,
+      quantity: !isNaN(quantityNum) ? quantityNum : 0,
       photo: photoPath
-    })
+    });
 
     res.status(201).json(product)
   } catch (error) {
@@ -117,7 +120,7 @@ app.get("/products/top-sellers", async (req, res) => {
 // Admin guard middleware (real implementation)
 function adminGuard(req, res, next) {
   const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ error: "Token não fornecido" });
+  if (!authHeader) return res.status(401).json({ error: "Acesso não autorizado: Faça login novamente." });
 
   const token = authHeader.split(" ")[1];
   try {
@@ -128,7 +131,7 @@ function adminGuard(req, res, next) {
     req.userId = decoded.id;
     next();
   } catch (error) {
-    return res.status(401).json({ error: "Token inválido ou expirado" });
+    return res.status(401).json({ error: "Sua sessão expirou. Faça login novamente." });
   }
 };
 
@@ -275,7 +278,7 @@ app.post("/orders", async (req, res) => {
 app.get("/orders", async (req, res) => {
   try {
     const orders = await Order.find()
-      .select("-createdAt")
+      .sort({ createdAt: -1 })
       .populate({
         path: "products.product"
       })
@@ -624,6 +627,13 @@ app.get("/stats/graph", async (req, res) => {
       { $limit: 5 }
     ]);
 
+    const totalInventoryItemsRes = await Product.aggregate([
+      { $group: { _id: null, total: { $sum: "$quantity" } } }
+    ]);
+    const totalInventoryItems = totalInventoryItemsRes[0]?.total || 0;
+
+    const activeSuppliers = await Supplier.countDocuments();
+
     res.json({
       topProducts,
       leastSold,
@@ -631,7 +641,9 @@ app.get("/stats/graph", async (req, res) => {
       totalSpent,
       salesByMonth,
       purchasesByMonth,
-      inventoryDistribution
+      inventoryDistribution,
+      totalInventoryItems,
+      activeSuppliers
     });
 
   } catch (error) {

@@ -228,7 +228,19 @@
       </div>
     </div>
 
-    <div class="modal-footer">
+    <div class="modal-footer justify-content-between">
+      <div>
+        <button type="button" class="btn btn-success rounded-pill px-4 me-2" 
+                *ngIf="selectedPurchase?.status === 'PENDENTE'" 
+                (click)="alterarStatus(selectedPurchase._id, 'ACEITE')">
+          <i class="fas fa-check me-2"></i> Aceitar (Restocar)
+        </button>
+        <button type="button" class="btn btn-danger rounded-pill px-4" 
+                *ngIf="selectedPurchase?.status === 'PENDENTE'" 
+                (click)="alterarStatus(selectedPurchase._id, 'RECUSADO')">
+          <i class="fas fa-times me-2"></i> Recusar
+        </button>
+      </div>
       <button type="button" class="btn btn-primary rounded-pill px-5" (click)="fecharDetalhesModal()">Fechar</button>
     </div>
   </div>

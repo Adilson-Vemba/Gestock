@@ -62,21 +62,21 @@ export class Compra implements OnInit {
   carregarHistorico() {
     this.supplierService.getHistory().subscribe({
       next: (data) => this.purchases = data.supplierRequests || [],
-      error: (err) => console.error('Erro ao carregar histórico:', err)
+      error: (err: any) => console.error('Erro ao carregar histórico:', err)
     });
   }
 
   carregarFornecedores() {
     this.supplierService.getSuppliers().subscribe({
       next: (data) => this.suppliers = data.suppliers || [],
-      error: (err) => console.error('Erro ao carregar fornecedores:', err)
+      error: (err: any) => console.error('Erro ao carregar fornecedores:', err)
     });
   }
 
   carregarProdutos() {
     this.productService.getProducts().subscribe({
       next: (data) => this.products = data || [],
-      error: (err) => console.error('Erro ao carregar produtos:', err)
+      error: (err: any) => console.error('Erro ao carregar produtos:', err)
     });
   }
 
@@ -102,7 +102,7 @@ export class Compra implements OnInit {
         this.fecharModal();
         this.carregarHistorico();
       },
-      error: (err) => {
+      error: (err: any) => {
         this.notify.error('Erro ao enviar pedido: ' + (err.error?.error || 'Erro desconhecido'));
         console.error(err);
       }
@@ -118,6 +118,22 @@ export class Compra implements OnInit {
   verDetalhes(purchase: any) {
     this.selectedPurchase = purchase;
     this.showDetailsModal = true;
+  }
+
+  alterarStatus(id: string, status: string) {
+    this.supplierService.updateRequestStatus(id, status).subscribe({
+      next: () => {
+        this.notify.success(`Pedido marcado como ${status}!`);
+        this.fecharDetalhesModal();
+        this.carregarHistorico();
+        if (status === 'ACEITE') {
+          this.carregarProdutos(); // Atualiza estoque na UI
+        }
+      },
+      error: (err: any) => {
+        this.notify.error('Erro ao alterar status: ' + (err.error?.error || 'Erro desconhecido'));
+      }
+    });
   }
 
   // --- Gestão de Fornecedores ---
@@ -143,7 +159,7 @@ export class Compra implements OnInit {
         this.fecharModalFornecedor();
         this.carregarFornecedores();
       },
-      error: (err) => {
+      error: (err: any) => {
         this.notify.error('Erro ao criar fornecedor: ' + (err.error?.error || 'Erro desconhecido'));
         console.error(err);
       }
@@ -158,7 +174,7 @@ export class Compra implements OnInit {
         this.notify.success('Fornecedor eliminado.');
         this.carregarFornecedores();
       },
-      error: (err) => {
+      error: (err: any) => {
         this.notify.error('Erro ao eliminar fornecedor: ' + (err.error?.error || 'Erro desconhecido'));
         console.error(err);
       }

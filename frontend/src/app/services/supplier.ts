@@ -26,6 +26,10 @@ export class SupplierService {
         return this.http.post<any>(`${this.API_URL}/${supplierId}/request`, { products });
     }
 
+    updateRequestStatus(id: string, status: string): Observable<any> {
+        return this.http.patch<any>(`${this.API_URL}/change-request-status/${id}`, { status });
+    }
+
     getHistory(): Observable<any> {
         return this.http.get<any>(`${this.API_URL}/history`);
     }

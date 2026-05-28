@@ -1,107 +1,190 @@
 <div class="client-dashboard">
   <!-- Navbar do Cliente -->
   <nav class="client-navbar">
-    <div class="container d-flex justify-content-between align-items-center">
-      <a routerLink="/dashboard" class="navbar-brand">
+    <div class="container-fluid px-4 d-flex justify-content-between align-items-center">
+      <a routerLink="/dashboard" class="navbar-brand d-flex align-items-center gap-2">
         <img src="/images/Logo.svg" alt="Gestock" height="38">
+        <span class="fw-bold text-dark d-none d-sm-inline">Store</span>
       </a>
-      <div class="nav-center d-none d-md-flex">
-        <a routerLink="/dashboard" class="nav-link active">
+      
+      <div class="search-bar d-none d-md-flex align-items-center bg-light rounded-pill px-3 py-2 w-25">
+        <i class="fas fa-search text-muted me-2"></i>
+        <input type="text" class="border-0 bg-transparent w-100 outline-none" placeholder="Pesquisar produtos...">
+      </div>
+
+      <div class="nav-right d-flex align-items-center gap-3">
+        <a routerLink="/dashboard" class="nav-link active d-none d-sm-flex">
           <i class="fas fa-home"></i> Início
         </a>
-        <a routerLink="/carrinho" class="nav-link">
-          <i class="fas fa-shopping-bag"></i> Carrinho
-          <span class="cart-count" *ngIf="(cartItems$ | async)?.length">{{ (cartItems$ | async)?.length }}</span>
+        <a routerLink="/carrinho" class="nav-link cart-link position-relative">
+          <i class="fas fa-shopping-bag fa-lg"></i>
+          <span class="cart-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary" *ngIf="(cartItems$ | async)?.length">
+            {{ (cartItems$ | async)?.length }}
+          </span>
         </a>
-      </div>
-      <div class="nav-right">
-        <div class="user-menu">
-          <div class="user-avatar">
-            <span>{{ userName.charAt(0).toUpperCase() }}</span>
+        <div class="divider d-none d-sm-block"></div>
+        <div class="user-menu dropdown">
+          <div class="d-flex align-items-center gap-2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="user-avatar shadow-sm">
+              <span>{{ userName.charAt(0).toUpperCase() }}</span>
+            </div>
+            <span class="user-name d-none d-md-inline fw-semibold">{{ userName }}</span>
+            <i class="fas fa-chevron-down small text-muted d-none d-md-inline"></i>
           </div>
-          <span class="user-name d-none d-md-inline">{{ userName }}</span>
-          <button class="btn-logout" (click)="logout()" title="Sair">
-            <i class="fas fa-sign-out-alt"></i>
-          </button>
+          <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-3 mt-2">
+            <li><a class="dropdown-item py-2" href="#"><i class="fas fa-user-circle me-2 text-muted"></i> Meu Perfil</a></li>
+            <li><a class="dropdown-item py-2" href="#"><i class="fas fa-box me-2 text-muted"></i> Meus Pedidos</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item py-2 text-danger" href="javascript:void(0)" (click)="logout()"><i class="fas fa-sign-out-alt me-2"></i> Sair</a></li>
+          </ul>
         </div>
       </div>
     </div>
   </nav>
 
-  <!-- Boas-vindas -->
-  <section class="welcome-section">
-    <div class="container">
-      <div class="welcome-card">
-        <div class="welcome-content">
-          <h1 class="animate-fade-in">Olá, <span class="text-gradient">{{ userName }}</span> 👋</h1>
-          <p class="animate-fade-in delay-1">Explore o nosso catálogo e encontre os melhores produtos para si.</p>
-        </div>
-        <div class="welcome-stats animate-fade-in delay-2">
-          <div class="stat-pill">
-            <i class="fas fa-box"></i>
-            <span>{{ products.length }} Produtos</span>
-          </div>
-          <div class="stat-pill">
-            <i class="fas fa-shopping-cart"></i>
-            <span>{{ (cartItems$ | async)?.length || 0 }} no Carrinho</span>
-          </div>
+  <!-- Store Hero Banner -->
+  <section class="store-hero">
+    <div class="container-fluid px-4 h-100">
+      <div class="row h-100 align-items-center">
+        <div class="col-lg-6 hero-text text-white">
+          <span class="badge bg-white text-primary mb-3 px-3 py-2 rounded-pill fw-bold shadow-sm">Novidades da Semana</span>
+          <h1 class="display-4 fw-bold mb-3 animate-fade-in">Bem-vindo de volta, {{ userName }}!</h1>
+          <p class="lead mb-4 opacity-75 animate-fade-in delay-1">Explore as melhores ofertas e produtos selecionados especialmente para você. Qualidade e preço justo num só lugar.</p>
+          <button class="btn btn-light btn-lg rounded-pill px-5 text-primary fw-bold shadow-sm animate-fade-in delay-2">Ver Promoções</button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Catálogo de Produtos -->
-  <main class="catalog-section">
-    <div class="container">
-      <div class="section-header">
-        <h2><i class="fas fa-store"></i> Produtos Disponíveis</h2>
-      </div>
+  <!-- Store Content -->
+  <main class="store-content container-fluid px-4 py-5">
+    <div class="row">
+      <!-- Sidebar Filters -->
+      <aside class="col-lg-3 d-none d-lg-block">
+        <div class="filter-sidebar bg-white p-4 rounded-4 shadow-sm border border-light sticky-top" style="top: 100px;">
+          <h4 class="fw-bold mb-4">Categorias</h4>
+          <ul class="list-unstyled category-list">
+            <li class="mb-3"><a href="#" class="text-decoration-none text-dark fw-semibold d-flex justify-content-between align-items-center active">Todos os Produtos <span class="badge bg-light text-dark rounded-pill">{{ products.length }}</span></a></li>
+            <li class="mb-3"><a href="#" class="text-decoration-none text-muted d-flex justify-content-between align-items-center">Eletrônicos <span class="badge bg-light text-dark rounded-pill">0</span></a></li>
+            <li class="mb-3"><a href="#" class="text-decoration-none text-muted d-flex justify-content-between align-items-center">Informática <span class="badge bg-light text-dark rounded-pill">0</span></a></li>
+            <li class="mb-3"><a href="#" class="text-decoration-none text-muted d-flex justify-content-between align-items-center">Acessórios <span class="badge bg-light text-dark rounded-pill">0</span></a></li>
+          </ul>
 
-      <div *ngIf="loading" class="loading-state">
-        <div class="spinner"></div>
-        <p>A carregar produtos...</p>
-      </div>
+          <hr class="my-4">
 
-      <div *ngIf="!loading && products.length === 0" class="empty-state">
-        <i class="fas fa-box-open"></i>
-        <h3>Nenhum produto disponível</h3>
-        <p>Volte mais tarde para ver novos produtos.</p>
-      </div>
+          <h4 class="fw-bold mb-4">Preço</h4>
+          <div class="price-filter">
+            <input type="range" class="form-range" min="0" max="100000" step="1000">
+            <div class="d-flex justify-content-between mt-2 text-muted small">
+              <span>0 KZ</span>
+              <span>100.000+ KZ</span>
+            </div>
+          </div>
+        </div>
+      </aside>
 
-      <div class="products-grid" *ngIf="!loading && products.length > 0">
-        <div class="product-card" *ngFor="let product of products; let i = index"
-             [style.animation-delay]="(i * 0.08) + 's'">
-          <div class="product-image">
-            <img [src]="product.photo ? 'http://localhost:8080/' + product.photo : 'https://placehold.co/400x300/f1f5f9/6366f1?text=' + product.name"
-                 [alt]="product.name">
-            <div class="product-overlay">
-              <button class="btn-quick-view" [routerLink]="['/produto', product.code]">
-                <i class="fas fa-eye"></i> Ver Detalhes
+      <!-- Products Grid -->
+      <div class="col-lg-9">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="h3 fw-bold mb-0">Catálogo</h2>
+          <div class="d-flex align-items-center gap-3">
+            <span class="text-muted small">Ordenar por:</span>
+            <select class="form-select form-select-sm rounded-pill px-3 bg-light border-0 w-auto">
+              <option>Mais Populares</option>
+              <option>Menor Preço</option>
+              <option>Maior Preço</option>
+              <option>Mais Recentes</option>
+            </select>
+          </div>
+        </div>
+
+        <div *ngIf="loading" class="loading-state text-center py-5">
+          <div class="spinner-border text-primary" role="status"></div>
+          <p class="mt-3 text-muted fw-medium">A carregar produtos maravilhosos...</p>
+        </div>
+
+        <div *ngIf="!loading && products.length === 0" class="empty-state text-center py-5 bg-white rounded-4 shadow-sm border border-light">
+          <img src="https://cdni.iconscout.com/illustration/premium/thumb/empty-cart-2130356-1800917.png" alt="Empty" width="200" class="mb-3 opacity-75">
+          <h3 class="fw-bold text-dark">Poxa, está vazio por aqui!</h3>
+          <p class="text-muted">Ainda não temos produtos disponíveis. Volte mais tarde!</p>
+        </div>
+
+        <div class="products-grid" *ngIf="!loading && products.length > 0">
+          <div class="product-card" *ngFor="let product of products; let i = index" [style.animation-delay]="(i * 0.05) + 's'">
+            <div class="product-image position-relative">
+              <span class="badge bg-danger position-absolute top-0 start-0 m-3 z-1" *ngIf="product.quantity < 5 && product.quantity > 0">Últimas Unidades</span>
+              <span class="badge bg-dark position-absolute top-0 start-0 m-3 z-1" *ngIf="product.quantity === 0">Esgotado</span>
+              
+              <img [src]="product.photo ? 'http://localhost:8080/' + product.photo : 'https://placehold.co/400x400/f8fafc/6366f1?text=' + product.name"
+                   [alt]="product.name" class="img-fluid">
+                   
+              <div class="product-overlay d-flex justify-content-center align-items-center">
+                <button class="btn btn-light rounded-circle shadow-sm mx-1 action-btn" title="Ver Detalhes">
+                  <i class="fas fa-eye text-dark"></i>
+                </button>
+                <button class="btn btn-primary rounded-circle shadow-sm mx-1 action-btn" title="Adicionar aos Favoritos">
+                  <i class="fas fa-heart"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="product-body p-4 bg-white">
+              <span class="text-muted small mb-1 d-block text-uppercase fw-semibold" style="letter-spacing: 1px; font-size: 0.7rem;">Geral</span>
+              <h3 class="product-title h6 fw-bold text-dark mb-2 text-truncate" [title]="product.name">{{ product.name }}</h3>
+              
+              <div class="d-flex align-items-center mb-3">
+                <div class="text-warning small me-2">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                </div>
+                <span class="text-muted small">(12 avaliações)</span>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-end mb-4">
+                <div class="price-wrap">
+                  <span class="fs-4 fw-black text-primary">{{ product.price | number:'1.2-2' }} KZ</span>
+                </div>
+                <span class="text-success small fw-medium" *ngIf="product.quantity > 0"><i class="fas fa-check-circle me-1"></i>Em stock</span>
+                <span class="text-danger small fw-medium" *ngIf="product.quantity <= 0"><i class="fas fa-times-circle me-1"></i>Sem stock</span>
+              </div>
+
+              <button class="btn btn-primary w-100 rounded-pill fw-bold shadow-sm d-flex justify-content-center align-items-center gap-2 add-to-cart-btn" 
+                      (click)="addToCart(product)" [disabled]="product.quantity <= 0">
+                <i class="fas fa-cart-plus"></i> Adicionar
               </button>
             </div>
           </div>
-          <div class="product-body">
-            <h3>{{ product.name }}</h3>
-            <div class="product-meta">
-              <span class="product-price">{{ product.price | number:'1.2-2' }} MT</span>
-              <span class="product-stock" [class.low]="product.quantity < 5">
-                <i class="fas fa-circle"></i>
-                {{ product.quantity > 0 ? product.quantity + ' em stock' : 'Esgotado' }}
-              </span>
-            </div>
-            <button class="btn-add-cart" (click)="addToCart(product)" [disabled]="product.quantity <= 0">
-              <i class="fas fa-cart-plus"></i> Adicionar ao Carrinho
-            </button>
-          </div>
         </div>
+        
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" class="mt-5" *ngIf="!loading && products.length > 0">
+          <ul class="pagination justify-content-center">
+            <li class="page-item disabled"><a class="page-link border-0 rounded-circle mx-1 text-muted" href="#"><i class="fas fa-chevron-left"></i></a></li>
+            <li class="page-item active"><a class="page-link border-0 rounded-circle mx-1 bg-primary text-white" href="#">1</a></li>
+            <li class="page-item"><a class="page-link border-0 rounded-circle mx-1 text-dark" href="#">2</a></li>
+            <li class="page-item"><a class="page-link border-0 rounded-circle mx-1 text-dark" href="#">3</a></li>
+            <li class="page-item"><a class="page-link border-0 rounded-circle mx-1 text-dark" href="#"><i class="fas fa-chevron-right"></i></a></li>
+          </ul>
+        </nav>
       </div>
     </div>
   </main>
 
   <!-- Footer -->
-  <footer class="client-footer">
-    <div class="container text-center">
-      <p>&copy; 2024 Gestock. Todos os direitos reservados.</p>
+  <footer class="client-footer bg-white border-top py-5 mt-5">
+    <div class="container-fluid px-4">
+      <div class="row align-items-center">
+        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+          <img src="/images/Logo.svg" alt="Gestock" height="30" class="mb-2 opacity-75 grayscale">
+          <p class="text-muted small mb-0">&copy; 2024 Gestock Store. Todos os direitos reservados.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <div class="payment-methods text-muted opacity-50">
+            <i class="fab fa-cc-visa fa-2x mx-2"></i>
+            <i class="fab fa-cc-mastercard fa-2x mx-2"></i>
+            <i class="fab fa-cc-paypal fa-2x mx-2"></i>
+          </div>
+        </div>
+      </div>
     </div>
   </footer>
 </div>

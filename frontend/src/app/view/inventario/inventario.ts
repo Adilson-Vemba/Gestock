@@ -30,6 +30,7 @@ export class Inventario implements OnInit {
       name: ['', Validators.required],
       price: ['', [Validators.required, Validators.min(0.01)]],
       quantity: [1, Validators.min(1)],
+      category: ['Geral'],
       code: ['']
     });
   }
@@ -57,6 +58,7 @@ export class Inventario implements OnInit {
         name: product.name,
         price: product.price,
         quantity: product.quantity,
+        category: product.category || 'Geral',
         code: product.code
       });
     } else {

@@ -17,6 +17,7 @@ export class Relatorio implements OnInit {
   mostSold: any[] = [];
   leastSold: any[] = [];
   statsData: any = null;
+  private charts: Chart[] = [];
 
   constructor(private statsService: StatsService) { }
 
@@ -30,7 +31,7 @@ export class Relatorio implements OnInit {
         this.statsData = data;
         this.mostSold = data.topProducts || [];
         this.leastSold = data.leastSold || [];
-        this.carregarGraficos();
+        setTimeout(() => this.carregarGraficos(), 0);
       },
       error: (err) => console.error('Erro ao carregar estatísticas:', err)
     });
@@ -38,6 +39,9 @@ export class Relatorio implements OnInit {
 
   carregarGraficos() {
     if (!this.statsData) return;
+
+    this.charts.forEach(chart => chart.destroy());
+    this.charts = [];
 
     // Processar vendas por mês
     const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
@@ -69,13 +73,13 @@ export class Relatorio implements OnInit {
   createSalesChart(labels: string[] = [], data: number[] = []) {
     const ctx = document.getElementById('salesChart') as HTMLCanvasElement;
     if (!ctx) return;
-    new Chart(ctx, {
+    const chart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: labels.slice(0, 6),
+        labels: labels,
         datasets: [{
-          label: 'Vendas (MZN)',
-          data: data.slice(0, 6),
+          label: 'Vendas (KZ)',
+          data: data,
           borderColor: '#10b981',
           backgroundColor: 'rgba(16, 185, 129, 0.1)',
           borderWidth: 3,
@@ -85,23 +89,25 @@ export class Relatorio implements OnInit {
       },
       options: { responsive: true, plugins: { legend: { display: false } } }
     });
+    this.charts.push(chart);
   }
 
   createPurchasesChart(labels: string[] = [], data: number[] = []) {
     const ctx = document.getElementById('purchasesChart') as HTMLCanvasElement;
     if (!ctx) return;
-    new Chart(ctx, {
+    const chart = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: labels,
         datasets: [{
-          label: 'Compras (Kz)',
+          label: 'Compras (KZ)',
           data: data,
           backgroundColor: '#f39c12'
         }]
       },
       options: { responsive: true, plugins: { legend: { display: false } } }
     });
+    this.charts.push(chart);
   }
 
 

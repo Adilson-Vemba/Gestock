@@ -21,6 +21,7 @@ export class Home {
   protected readonly title = signal('front-streetshop');
 
   statsData: any = null;
+  private charts: Chart[] = [];
 
   constructor(private statsService: StatsService) { }
 
@@ -32,7 +33,7 @@ export class Home {
     this.statsService.getGraphStats().subscribe({
       next: (data) => {
         this.statsData = data;
-        this.carregarGraficos();
+        setTimeout(() => this.carregarGraficos(), 0);
       },
       error: (err) => console.error('Erro ao carregar estatísticas:', err)
     });
@@ -40,6 +41,10 @@ export class Home {
 
   carregarGraficos(): void {
     if (!this.statsData) return;
+
+    // Destruir gráficos anteriores para evitar erros de reutilização de canvas
+    this.charts.forEach(chart => chart.destroy());
+    this.charts = [];
 
     // Processar vendas por mês
     const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
@@ -79,13 +84,13 @@ export class Home {
     Chart.defaults.color = '#64748b';
 
     // Gráfico Compras
-    new Chart("comprasChart", {
+    const comprasChart = new Chart("comprasChart", {
       type: 'bar',
       data: {
-        labels: meses.slice(0, 6),
+        labels: meses,
         datasets: [{
-          label: 'Investimento (MZN)',
-          data: comprasPorMes.slice(0, 6),
+          label: 'Investimento (KZ)',
+          data: comprasPorMes,
           backgroundColor: '#6366f1',
           borderRadius: 8,
           barThickness: 20
@@ -103,15 +108,16 @@ export class Home {
         }
       }
     });
+    this.charts.push(comprasChart);
 
     // Gráfico Vendas
-    new Chart("vendasChart", {
+    const vendasChart = new Chart("vendasChart", {
       type: 'line',
       data: {
-        labels: meses.slice(0, 6),
+        labels: meses,
         datasets: [{
-          label: 'Receita (MZN)',
-          data: vendasPorMes.slice(0, 6),
+          label: 'Receita (KZ)',
+          data: vendasPorMes,
           borderColor: '#10b981',
           backgroundColor: 'rgba(16, 185, 129, 0.1)',
           borderWidth: 3,
@@ -133,9 +139,10 @@ export class Home {
         }
       }
     });
+    this.charts.push(vendasChart);
 
     // Gráfico Inventário
-    new Chart("inventarioChart", {
+    const inventarioChart = new Chart("inventarioChart", {
       type: 'doughnut',
       data: {
         labels: labelsInventario.length ? labelsInventario : ['Sem Dados'],
@@ -157,5 +164,6 @@ export class Home {
         }
       }
     });
+    this.charts.push(inventarioChart);
   }
 }
