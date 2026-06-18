@@ -28,14 +28,31 @@ export class ClientDashboard implements OnInit {
   
   // Filtros
   searchTerm: string = '';
-  maxPrice: number = 200000;
+  maxPrice: number = 2000000;
+  categoryFilter: string = '';
+  sortBy: string = 'menor_preco';
+
+  setCategory(cat: string) {
+    this.categoryFilter = cat;
+  }
 
   get filteredProducts() {
-    return this.products.filter(p => {
+    let filtered = this.products.filter(p => {
       const matchName = p.name.toLowerCase().includes(this.searchTerm.toLowerCase());
       const matchPrice = p.price <= this.maxPrice;
-      return matchName && matchPrice;
+      const matchCategory = this.categoryFilter === '' || p.category === this.categoryFilter;
+      return matchName && matchPrice && matchCategory;
     });
+
+    if (this.sortBy === 'menor_preco') {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (this.sortBy === 'maior_preco') {
+      filtered.sort((a, b) => b.price - a.price);
+    } else if (this.sortBy === 'recentes') {
+      filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    }
+
+    return filtered;
   }
 
   ngOnInit() {
@@ -53,7 +70,14 @@ export class ClientDashboard implements OnInit {
   }
 
   addToCart(product: any) {
-    this.cartService.addItem(product);
+    this.cartService.addItem({
+      productId: product.code || product._id,
+      code: product.code || product._id,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      photo: product.photo
+    });
   }
 
   logout() {

@@ -14,9 +14,12 @@
       </a>
     </li>
     <li>
-      <a routerLink="/admin/venda" routerLinkActive="is-active">
-        <span class="icon"><i class="fas fa-dollar-sign"></i></span>
-        <span class="menu-label">Vendas</span>
+      <a routerLink="/admin/venda" routerLinkActive="is-active" (click)="clearBadge()" class="d-flex justify-content-between align-items-center pe-3">
+        <div>
+          <span class="icon"><i class="fas fa-dollar-sign"></i></span>
+          <span class="menu-label">Vendas</span>
+        </div>
+        <span *ngIf="hasNewSales" class="badge bg-danger rounded-circle p-1" style="width: 10px; height: 10px; display: inline-block;" title="Nova Venda!"></span>
       </a>
     </li>
     <li>

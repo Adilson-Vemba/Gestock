@@ -10,18 +10,20 @@
   <div class="navbar-end ms-auto">
     <div class="navbar-item has-dropdown is-hoverable">
       <div class="user-profile">
-        <img class="avatar" src="/images/download.png" alt="User Avatar">
-        <div class="user-info d-none d-md-flex">
-          <span>Administrador</span>
-          <small>Gestock Team</small>
+        <div class="user-avatar shadow-sm" style="width: 36px; height: 36px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">
+          <span>{{ userName.charAt(0).toUpperCase() }}</span>
+        </div>
+        <div class="user-info d-none d-md-flex ms-2">
+          <span class="fw-bold">{{ userName }}</span>
+          <small class="text-muted">Administrador</small>
         </div>
         <i class="fas fa-chevron-down ms-2 small text-muted"></i>
       </div>
 
       <div class="navbar-dropdown is-right shadow-sm border-0 rounded-3">
         <div class="p-3 border-bottom d-md-none">
-          <p class="mb-0 fw-bold">Administrador</p>
-          <small class="text-muted">Gestock Team</small>
+          <p class="mb-0 fw-bold">{{ userName }}</p>
+          <small class="text-muted">Administrador</small>
         </div>
         <a class="navbar-item text-danger py-2 px-3 dropdown-logout" (click)="logout()">
           <i class="logout-icon me-2"></i>

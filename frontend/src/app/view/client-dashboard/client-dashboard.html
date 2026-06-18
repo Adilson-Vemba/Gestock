@@ -9,12 +9,12 @@
       
       <div class="search-bar d-none d-md-flex align-items-center bg-light rounded-pill px-3 py-2 w-25">
         <i class="fas fa-search text-muted me-2"></i>
-        <input type="text" class="border-0 bg-transparent w-100 outline-none" placeholder="Pesquisar produtos...">
+        <input type="text" class="border-0 bg-transparent w-100 outline-none" placeholder="Pesquisar produtos..." [(ngModel)]="searchTerm">
       </div>
 
       <div class="nav-right d-flex align-items-center gap-3">
         <a routerLink="/dashboard" class="nav-link active d-none d-sm-flex">
-          <i class="fas fa-home"></i> Início
+          <i class="fas fa-home me-2"></i> Início
         </a>
         <a routerLink="/carrinho" class="nav-link cart-link position-relative">
           <i class="fas fa-shopping-bag fa-lg"></i>
@@ -35,7 +35,7 @@
             <li><a class="dropdown-item py-2" href="#"><i class="fas fa-user-circle me-2 text-muted"></i> Meu Perfil</a></li>
             <li><a class="dropdown-item py-2" href="#"><i class="fas fa-box me-2 text-muted"></i> Meus Pedidos</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item py-2 text-danger" href="javascript:void(0)" (click)="logout()"><i class="fas fa-sign-out-alt me-2"></i> Sair</a></li>
+            <li><a class="dropdown-item py-2 text-danger" role="button" (click)="logout()"><i class="fas fa-sign-out-alt me-2"></i> Sair</a></li>
           </ul>
         </div>
       </div>
@@ -64,20 +64,23 @@
         <div class="filter-sidebar bg-white p-4 rounded-4 shadow-sm border border-light sticky-top" style="top: 100px;">
           <h4 class="fw-bold mb-4">Categorias</h4>
           <ul class="list-unstyled category-list">
-            <li class="mb-3"><a href="#" class="text-decoration-none text-dark fw-semibold d-flex justify-content-between align-items-center active">Todos os Produtos <span class="badge bg-light text-dark rounded-pill">{{ products.length }}</span></a></li>
-            <li class="mb-3"><a href="#" class="text-decoration-none text-muted d-flex justify-content-between align-items-center">Eletrônicos <span class="badge bg-light text-dark rounded-pill">0</span></a></li>
-            <li class="mb-3"><a href="#" class="text-decoration-none text-muted d-flex justify-content-between align-items-center">Informática <span class="badge bg-light text-dark rounded-pill">0</span></a></li>
-            <li class="mb-3"><a href="#" class="text-decoration-none text-muted d-flex justify-content-between align-items-center">Acessórios <span class="badge bg-light text-dark rounded-pill">0</span></a></li>
+            <li class="mb-3"><a role="button" (click)="setCategory('')" class="text-decoration-none d-flex justify-content-between align-items-center" [class.text-dark]="categoryFilter === ''" [class.fw-semibold]="categoryFilter === ''" [class.active]="categoryFilter === ''" [class.text-muted]="categoryFilter !== ''">Todos os Produtos <span class="badge bg-light text-dark rounded-pill">{{ products.length }}</span></a></li>
+            <li class="mb-3"><a role="button" (click)="setCategory('Geral')" class="text-decoration-none d-flex justify-content-between align-items-center" [class.active]="categoryFilter === 'Geral'" [class.text-dark]="categoryFilter === 'Geral'" [class.fw-semibold]="categoryFilter === 'Geral'" [class.text-muted]="categoryFilter !== 'Geral'">Geral</a></li>
+            <li class="mb-3"><a role="button" (click)="setCategory('Eletrônicos')" class="text-decoration-none d-flex justify-content-between align-items-center" [class.active]="categoryFilter === 'Eletrônicos'" [class.text-dark]="categoryFilter === 'Eletrônicos'" [class.fw-semibold]="categoryFilter === 'Eletrônicos'" [class.text-muted]="categoryFilter !== 'Eletrônicos'">Eletrônicos</a></li>
+            <li class="mb-3"><a role="button" (click)="setCategory('Informática')" class="text-decoration-none d-flex justify-content-between align-items-center" [class.active]="categoryFilter === 'Informática'" [class.text-dark]="categoryFilter === 'Informática'" [class.fw-semibold]="categoryFilter === 'Informática'" [class.text-muted]="categoryFilter !== 'Informática'">Informática</a></li>
+            <li class="mb-3"><a role="button" (click)="setCategory('Acessórios')" class="text-decoration-none d-flex justify-content-between align-items-center" [class.active]="categoryFilter === 'Acessórios'" [class.text-dark]="categoryFilter === 'Acessórios'" [class.fw-semibold]="categoryFilter === 'Acessórios'" [class.text-muted]="categoryFilter !== 'Acessórios'">Acessórios</a></li>
+            <li class="mb-3"><a role="button" (click)="setCategory('Vestuário')" class="text-decoration-none d-flex justify-content-between align-items-center" [class.active]="categoryFilter === 'Vestuário'" [class.text-dark]="categoryFilter === 'Vestuário'" [class.fw-semibold]="categoryFilter === 'Vestuário'" [class.text-muted]="categoryFilter !== 'Vestuário'">Vestuário</a></li>
+            <li class="mb-3"><a role="button" (click)="setCategory('Casa e Decoração')" class="text-decoration-none d-flex justify-content-between align-items-center" [class.active]="categoryFilter === 'Casa e Decoração'" [class.text-dark]="categoryFilter === 'Casa e Decoração'" [class.fw-semibold]="categoryFilter === 'Casa e Decoração'" [class.text-muted]="categoryFilter !== 'Casa e Decoração'">Casa e Decoração</a></li>
           </ul>
 
           <hr class="my-4">
 
           <h4 class="fw-bold mb-4">Preço</h4>
           <div class="price-filter">
-            <input type="range" class="form-range" min="0" max="100000" step="1000">
+            <input type="range" class="form-range" min="0" max="1000000" step="1000" [(ngModel)]="maxPrice">
             <div class="d-flex justify-content-between mt-2 text-muted small">
               <span>0 KZ</span>
-              <span>100.000+ KZ</span>
+              <span>{{ maxPrice | number:'1.2-2' }} KZ</span>
             </div>
           </div>
         </div>
@@ -89,11 +92,11 @@
           <h2 class="h3 fw-bold mb-0">Catálogo</h2>
           <div class="d-flex align-items-center gap-3">
             <span class="text-muted small">Ordenar por:</span>
-            <select class="form-select form-select-sm rounded-pill px-3 bg-light border-0 w-auto">
-              <option>Mais Populares</option>
-              <option>Menor Preço</option>
-              <option>Maior Preço</option>
-              <option>Mais Recentes</option>
+            <select class="form-select form-select-sm rounded-pill px-3 bg-light border-0 w-auto" [(ngModel)]="sortBy">
+              <option value="populares">Mais Populares</option>
+              <option value="menor_preco">Menor Preço</option>
+              <option value="maior_preco">Maior Preço</option>
+              <option value="recentes">Mais Recentes</option>
             </select>
           </div>
         </div>
@@ -109,8 +112,8 @@
           <p class="text-muted">Ainda não temos produtos disponíveis. Volte mais tarde!</p>
         </div>
 
-        <div class="products-grid" *ngIf="!loading && products.length > 0">
-          <div class="product-card" *ngFor="let product of products; let i = index" [style.animation-delay]="(i * 0.05) + 's'">
+        <div class="products-grid" *ngIf="!loading && filteredProducts.length > 0">
+          <div class="product-card" *ngFor="let product of filteredProducts; let i = index" [style.animation-delay]="(i * 0.05) + 's'">
             <div class="product-image position-relative">
               <span class="badge bg-danger position-absolute top-0 start-0 m-3 z-1" *ngIf="product.quantity < 5 && product.quantity > 0">Últimas Unidades</span>
               <span class="badge bg-dark position-absolute top-0 start-0 m-3 z-1" *ngIf="product.quantity === 0">Esgotado</span>
@@ -129,7 +132,7 @@
             </div>
             
             <div class="product-body p-4 bg-white">
-              <span class="text-muted small mb-1 d-block text-uppercase fw-semibold" style="letter-spacing: 1px; font-size: 0.7rem;">Geral</span>
+              <span class="text-muted small mb-1 d-block text-uppercase fw-semibold" style="letter-spacing: 1px; font-size: 0.7rem;">{{ product.category || 'Geral' }}</span>
               <h3 class="product-title h6 fw-bold text-dark mb-2 text-truncate" [title]="product.name">{{ product.name }}</h3>
               
               <div class="d-flex align-items-center mb-3">
@@ -175,7 +178,8 @@
       <div class="row align-items-center">
         <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
           <img src="/images/Logo.svg" alt="Gestock" height="30" class="mb-2 opacity-75 grayscale">
-          <p class="text-muted small mb-0">&copy; 2024 Gestock Store. Todos os direitos reservados.</p>
+          <p class="text-muted small mb-1">&copy; 2024 Gestock Store. Todos os direitos reservados.</p>
+          <p class="text-muted fw-bold mb-0">Apoio ao Cliente: 929 994 766</p>
         </div>
         <div class="col-md-6 text-center text-md-end">
           <div class="payment-methods text-muted opacity-50">

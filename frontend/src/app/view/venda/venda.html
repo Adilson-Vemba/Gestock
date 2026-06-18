@@ -137,11 +137,30 @@
       <div class="row mb-4">
         <div class="col-6">
           <label class="text-muted small d-block">ID DA VENDA</label>
-          <code class="h6">{{ selectedSale.id || selectedSale._id }}</code>
+          <code class="h6">{{ selectedSale.id || selectedSale._id | slice: -6 }}</code>
         </div>
         <div class="col-6 text-end">
           <label class="text-muted small d-block">DATA</label>
           <span class="h6">{{ selectedSale.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+      </div>
+
+      <div class="row mb-4 bg-light p-3 rounded" *ngIf="selectedSale.customerName">
+        <div class="col-12 mb-2">
+          <label class="text-muted small d-block text-uppercase fw-bold">Dados do Cliente</label>
+          <span class="fw-semibold d-block mt-1">{{ selectedSale.customerName }}</span>
+          <span class="small text-muted d-block"><i class="fas fa-phone me-1"></i> {{ selectedSale.customerPhone }}</span>
+          <span class="small text-muted d-block" *ngIf="selectedSale.customerEmail"><i class="fas fa-envelope me-1"></i> {{ selectedSale.customerEmail }}</span>
+        </div>
+        <div class="col-6 mt-2">
+          <label class="text-muted small d-block text-uppercase fw-bold">Pagamento</label>
+          <span class="badge mt-1" [ngClass]="{'bg-warning text-dark': selectedSale.paymentMethod === 'numerario', 'bg-primary': selectedSale.paymentMethod === 'cartao'}">
+            {{ selectedSale.paymentStatus || (selectedSale.paymentMethod | titlecase) }}
+          </span>
+        </div>
+        <div class="col-6 mt-2 text-end">
+          <label class="text-muted small d-block text-uppercase fw-bold">Referência</label>
+          <code class="h6 mt-1 d-block">{{ selectedSale.reference || 'N/A' }}</code>
         </div>
       </div>
 

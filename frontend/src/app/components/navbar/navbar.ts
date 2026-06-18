@@ -12,11 +12,13 @@ import { AuthService } from '../../services/auth';
 })
 export class Navbar {
   pageTitle: string = 'Gestock';
+  userName: string = 'Admin';
 
   constructor(
     private router: Router,
     private authService: AuthService
   ) { 
+    this.userName = this.authService.getUserName() || 'Admin';
     this.router.events.subscribe(() => {
       const segments = this.router.url.split('/').filter(Boolean);
       // Determine page title based on route hierarchy

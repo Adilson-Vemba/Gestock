@@ -83,7 +83,7 @@ Product.findByCode = (code) => {
 
 app.post("/products", adminGuard, upload.single("photo"), async (req, res) => {
   try {
-    const { name, price, quantity: productQuantity } = req.body;
+    const { name, price, quantity: productQuantity, category } = req.body;
     // Ensure numeric values for price and quantity
     const priceNum = Number(price);
     const quantityNum = productQuantity !== undefined ? Number(productQuantity) : 0;
@@ -97,6 +97,7 @@ app.post("/products", adminGuard, upload.single("photo"), async (req, res) => {
       name,
       price: priceNum,
       quantity: !isNaN(quantityNum) ? quantityNum : 0,
+      category: category || 'Geral',
       photo: photoPath
     });
 
@@ -225,7 +226,7 @@ app.get("/products", async (req, res) => {
 
 app.post("/orders", async (req, res) => {
   try {
-    const { products } = req.body
+    const { products, customerName, customerEmail, customerPhone, paymentMethod, paymentStatus, reference } = req.body
 
     if (!products || products.length === 0) {
       return res.status(400).json({ error: "Nenhum produto foi informado" })
@@ -263,7 +264,15 @@ app.post("/orders", async (req, res) => {
       })
     }
 
-    const order = await Order.create({ products: orderProducts })
+    const order = await Order.create({ 
+      products: orderProducts,
+      customerName,
+      customerEmail,
+      customerPhone,
+      paymentMethod,
+      paymentStatus,
+      reference
+    })
     const invoice = await (await Invoice.create({ order: order._id })).populate({
       path: 'order',
       populate: { path: 'products.product' }

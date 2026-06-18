@@ -40,7 +40,13 @@ const orderSchema = new Schema({
             product: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
             quantity: { type: Number, default: 1, min: 1 }
         }
-    ]
+    ],
+    customerName: { type: String },
+    customerEmail: { type: String },
+    customerPhone: { type: String },
+    paymentMethod: { type: String },
+    paymentStatus: { type: String },
+    reference: { type: String }
 }, { timestamps: true, versionKey: false })
 
 const invoiceSchema = new Schema({

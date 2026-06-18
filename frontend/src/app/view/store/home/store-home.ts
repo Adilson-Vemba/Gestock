@@ -77,8 +77,8 @@ export class StoreHome implements OnInit {
     }
 
     const item: CartItem = {
-      productId: product._id,
-      code: product.code,
+      productId: product.code || product._id,
+      code: product.code || product._id,
       name: product.name,
       price: product.price,
       quantity: 1,
