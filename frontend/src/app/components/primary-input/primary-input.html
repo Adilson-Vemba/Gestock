@@ -3,8 +3,17 @@
     <label [for]="inputName">{{ label }}</label>
 
     <div class="input-content" [class.has-error]="hasError">
-        <input [type]="type" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" (blur)="onTouched()" />
+        <input [type]="displayType" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" (blur)="onTouched()" />
+        <button
+            *ngIf="type === 'password'"
+            type="button"
+            class="toggle-password-btn"
+            (click)="togglePassword()"
+            [title]="showPassword ? 'Ocultar senha' : 'Mostrar senha'">
+            <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+        </button>
     </div>
 
     <span class="error-msg text-danger small mt-1" *ngIf="hasError">{{ errorMsg }}</span>
+
 </div>

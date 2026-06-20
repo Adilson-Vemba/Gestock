@@ -5,15 +5,17 @@
     text-align: start;
     margin-bottom: 15px;
 
-
     .input-content{
         width: 100%;
         display: flex;
         align-items: center;
         border: 1px solid #ccc;
         border-radius: 4px;
-        
+        overflow: hidden;
 
+        &.has-error {
+            border-color: #dc3545;
+        }
     }
 
     .icon{
@@ -22,13 +24,29 @@
     }
 
     input{
-        width: 100%;
+        flex: 1;
         padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
+        border: none;
+        outline: none;
         font-size: 16px;
         margin: 0;
-        
-    
-}
+        background: transparent;
+    }
+
+    .toggle-password-btn {
+        background: none;
+        border: none;
+        outline: none;
+        padding: 0 12px;
+        cursor: pointer;
+        color: #888;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        transition: color 0.2s;
+
+        &:hover {
+            color: #333;
+        }
+    }
 }

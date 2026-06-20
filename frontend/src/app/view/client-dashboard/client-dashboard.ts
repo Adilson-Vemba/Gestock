@@ -23,14 +23,20 @@ export class ClientDashboard implements OnInit {
   private router = inject(Router);
 
   userName = this.auth.getUserName();
+  get isAdmin() { return this.auth.isAdmin(); }
   cartItems$ = this.cartService.items$;
   products: any[] = [];
   loading = true;
   mobileMenuOpen = false;
+  showUserMenu = false;
   
   myOrders: any[] = [];
   showMyOrdersModal = false;
   loadingOrders = false;
+  
+  toggleUserMenu() {
+    this.showUserMenu = !this.showUserMenu;
+  }
   
   // Filtros
   searchTerm: string = '';

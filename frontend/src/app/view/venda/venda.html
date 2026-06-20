@@ -196,12 +196,16 @@
       </div>
     </div>
 
-    <div class="modal-footer d-flex justify-content-between">
-      <button *ngIf="selectedSale?.approvalStatus === 'Pendente'" class="btn btn-success rounded-pill px-4" (click)="aprovarPagamento(selectedSale.id || selectedSale._id)">
+    <div class="modal-footer d-flex justify-content-between align-items-center">
+      <button *ngIf="selectedSale?.approvalStatus !== 'Aprovado'" class="btn btn-success rounded-pill px-4" (click)="aprovarPagamento(selectedSale.id || selectedSale._id)">
         <i class="fas fa-check-circle me-2"></i> Aceitar Pagamento
       </button>
-      <div *ngIf="selectedSale?.approvalStatus !== 'Pendente'"></div>
-      <button type="button" class="btn btn-light border rounded-pill px-5" (click)="fecharDetalhesModal()">Fechar</button>
+      <span *ngIf="selectedSale?.approvalStatus === 'Aprovado'" class="badge bg-success px-3 py-2">
+        <i class="fas fa-check-circle me-1"></i> Pagamento Aprovado
+      </span>
+      <button type="button" class="btn btn-light border rounded-pill px-4" (click)="fecharDetalhesModal()">
+        <i class="fas fa-times me-1"></i> Fechar
+      </button>
     </div>
   </div>
 </div>

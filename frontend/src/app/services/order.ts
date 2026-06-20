@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -10,8 +10,15 @@ export class OrderService {
 
     constructor(private http: HttpClient) { }
 
+    private getHeaders(): HttpHeaders {
+        const token = localStorage.getItem('token');
+        return new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
+    }
+
     getOrders(): Observable<any> {
-        return this.http.get<any>(this.API_URL);
+        return this.http.get<any>(this.API_URL, { headers: this.getHeaders() });
     }
 
     getOrder(id: string): Observable<any> {
@@ -27,6 +34,6 @@ export class OrderService {
     }
 
     approveOrder(id: string): Observable<any> {
-        return this.http.patch<any>(`${this.API_URL}/${id}/approve`, {});
+        return this.http.patch<any>(`${this.API_URL}/${id}/approve`, {}, { headers: this.getHeaders() });
     }
 }

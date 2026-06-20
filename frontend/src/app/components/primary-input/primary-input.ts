@@ -29,8 +29,20 @@ export class PrimaryInput implements ControlValueAccessor {
   @Input() errorMsg: string = '';
 
   value: string = ''
+  showPassword: boolean = false;
   onChange: any = () => { }
   onTouched: any = () => { }
+
+  get displayType(): string {
+    if (this.type === 'password') {
+      return this.showPassword ? 'text' : 'password';
+    }
+    return this.type;
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
 
   onInput(event: any) {
     const value = event.target.value;

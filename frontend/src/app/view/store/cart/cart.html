@@ -5,7 +5,7 @@
         <img src="/images/Logo.svg" alt="Gestock Logo" height="40">
       </a>
       <div class="nav-links">
-        <a routerLink="/" class="nav-item">Voltar para a Loja</a>
+        <a routerLink="/dashboard" class="nav-item">Voltar para a Loja</a>
       </div>
     </div>
   </nav>
@@ -17,7 +17,7 @@
       <i class="fas fa-shopping-cart fa-4x mb-4 text-muted"></i>
       <h2 class="text-muted">Seu carrinho está vazio</h2>
       <p class="mb-4">Adicione alguns produtos para começar sua compra.</p>
-      <a routerLink="/" class="btn btn-primary btn-lg rounded-pill px-5">Ver Produtos</a>
+      <a routerLink="/dashboard" class="btn btn-primary btn-lg rounded-pill px-5">Ver Produtos</a>
     </div>
 
     <div class="row g-4" *ngIf="(cartItems$ | async)?.length">
