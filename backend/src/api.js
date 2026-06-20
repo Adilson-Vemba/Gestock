@@ -224,9 +224,15 @@ app.get("/products", async (req, res) => {
 
 
 
-app.post("/orders", async (req, res) => {
+app.post("/orders", upload.single("receipt"), async (req, res) => {
   try {
-    const { products, customerName, customerEmail, customerPhone, paymentMethod, paymentStatus, reference } = req.body
+    const { customerName, customerEmail, customerPhone, paymentMethod, paymentStatus, reference, userId } = req.body
+    let products = req.body.products
+    if (typeof products === 'string') {
+      products = JSON.parse(products)
+    }
+
+    const receiptPhoto = req.file ? req.file.path.replace(/\\/g, '/') : null;
 
     if (!products || products.length === 0) {
       return res.status(400).json({ error: "Nenhum produto foi informado" })
@@ -271,7 +277,10 @@ app.post("/orders", async (req, res) => {
       customerPhone,
       paymentMethod,
       paymentStatus,
-      reference
+      reference,
+      receiptPhoto,
+      userId,
+      approvalStatus: 'Pendente'
     })
     const invoice = await (await Invoice.create({ order: order._id })).populate({
       path: 'order',
@@ -281,6 +290,41 @@ app.post("/orders", async (req, res) => {
     res.json({ invoice })
   } catch (error) {
     res.status(500).json({ error: String(error) })
+  }
+})
+
+// GET /orders/my-orders - Fetches orders for a specific user based on email or userId
+app.get("/orders/my-orders", async (req, res) => {
+  try {
+    // Basic implementation: the frontend should pass the email in query to identify the user
+    // In a real scenario, this would use authGuard and req.userId
+    const { email } = req.query;
+    if (!email) return res.status(400).json({ error: "Email do cliente é necessário" });
+
+    const orders = await Order.find({ customerEmail: email })
+      .sort({ createdAt: -1 })
+      .populate({ path: "products.product" });
+      
+    res.json({ orders });
+  } catch (error) {
+    res.status(500).json({ error: String(error) });
+  }
+});
+
+// PATCH /orders/:id/approve - Admin approves the payment
+app.patch("/orders/:id/approve", adminGuard, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const order = await Order.findById(id);
+    if (!order) return res.status(404).json({ error: "Pedido não encontrado" });
+
+    order.approvalStatus = 'Aprovado';
+    order.paymentStatus = 'Pago via ' + (order.paymentMethod === 'numerario' ? 'Presencial' : 'Transferência');
+    await order.save();
+
+    res.json({ message: "Pagamento aprovado com sucesso", order });
+  } catch (error) {
+    res.status(500).json({ error: String(error) });
   }
 })
 

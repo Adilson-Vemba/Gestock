@@ -18,6 +18,7 @@ export class AuthService {
           localStorage.setItem('token', res.token);
           localStorage.setItem('role', res.role || 'client');
           localStorage.setItem('userName', res.name || '');
+          localStorage.setItem('userEmail', data.email);
         }
       })
     );
@@ -47,6 +48,10 @@ export class AuthService {
 
   getUserName(): string {
     return localStorage.getItem('userName') || 'Utilizador';
+  }
+
+  getEmail(): string {
+    return localStorage.getItem('userEmail') || '';
   }
 
   getToken(): string | null {

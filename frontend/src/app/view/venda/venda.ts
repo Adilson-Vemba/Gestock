@@ -126,4 +126,20 @@ export class Venda implements OnInit {
     this.notify.success(`Gerando fatura para a venda ${sale.id || sale._id}`);
   }
 
+  aprovarPagamento(id: string) {
+    this.orderService.approveOrder(id).subscribe({
+      next: (res) => {
+        this.notify.success('Pagamento aprovado com sucesso!');
+        if (this.selectedSale) {
+          this.selectedSale.approvalStatus = 'Aprovado';
+          this.selectedSale.paymentStatus = res.order?.paymentStatus || 'Pago';
+        }
+        this.carregarVendas();
+      },
+      error: (err) => {
+        this.notify.error('Erro ao aprovar: ' + (err.error?.error || 'Desconhecido'));
+      }
+    });
+  }
+
 }

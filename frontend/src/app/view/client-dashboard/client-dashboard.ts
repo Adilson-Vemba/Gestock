@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth';
 import { ProductService } from '../../services/product';
 import { CartService } from '../../services/cart.service';
+import { OrderService } from '../../services/order';
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,6 +19,7 @@ export class ClientDashboard implements OnInit {
   private auth = inject(AuthService);
   private productService = inject(ProductService);
   private cartService = inject(CartService);
+  private orderService = inject(OrderService);
   private router = inject(Router);
 
   userName = this.auth.getUserName();
@@ -25,6 +27,10 @@ export class ClientDashboard implements OnInit {
   products: any[] = [];
   loading = true;
   mobileMenuOpen = false;
+  
+  myOrders: any[] = [];
+  showMyOrdersModal = false;
+  loadingOrders = false;
   
   // Filtros
   searchTerm: string = '';
@@ -83,5 +89,29 @@ export class ClientDashboard implements OnInit {
   logout() {
     this.auth.logout();
     this.router.navigate(['/']);
+  }
+
+  abrirMeusPedidos(event: Event) {
+    event.preventDefault();
+    this.showMyOrdersModal = true;
+    this.loadingOrders = true;
+    const email = this.auth.getEmail();
+    if (email) {
+      this.orderService.getMyOrders(email).subscribe({
+        next: (res) => {
+          this.myOrders = res.orders || [];
+          this.loadingOrders = false;
+        },
+        error: () => {
+          this.loadingOrders = false;
+        }
+      });
+    } else {
+      this.loadingOrders = false;
+    }
+  }
+
+  fecharMeusPedidos() {
+    this.showMyOrdersModal = false;
   }
 }

@@ -21,4 +21,12 @@ export class OrderService {
     createOrder(order: any): Observable<any> {
         return this.http.post<any>(this.API_URL, order);
     }
+
+    getMyOrders(email: string): Observable<any> {
+        return this.http.get<any>(`${this.API_URL}/my-orders?email=${email}`);
+    }
+
+    approveOrder(id: string): Observable<any> {
+        return this.http.patch<any>(`${this.API_URL}/${id}/approve`, {});
+    }
 }

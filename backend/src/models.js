@@ -46,7 +46,10 @@ const orderSchema = new Schema({
     customerPhone: { type: String },
     paymentMethod: { type: String },
     paymentStatus: { type: String },
-    reference: { type: String }
+    reference: { type: String },
+    receiptPhoto: { type: String },
+    approvalStatus: { type: String, default: 'Pendente' },
+    userId: { type: Schema.Types.ObjectId, ref: 'User' }
 }, { timestamps: true, versionKey: false })
 
 const invoiceSchema = new Schema({

@@ -29,6 +29,7 @@ export class Cart implements OnInit {
   isProcessingPayment = false;
   showReceiptModal = false;
   receiptData: any = null;
+  receiptFile: File | null = null;
 
   constructor() {}
 
@@ -56,23 +57,26 @@ export class Cart implements OnInit {
     // Simulação do gateway de pagamento ou processamento local
     setTimeout(() => {
       const isCard = this.paymentMethod === 'cartao';
-      const statusText = isCard ? 'Pago via Cartão' : 'Aguarda Pagamento Presencial';
+      const statusText = isCard ? 'Pago via Cartão' : (this.paymentMethod === 'transferencia' ? 'Pendente Validação de Transferência' : 'Aguarda Pagamento Presencial');
       const refNumber = 'REF-' + Math.floor(100000 + Math.random() * 900000);
 
-      const orderPayload = {
-        products: items.map(item => ({
-          code: item.code,
-          quantity: item.quantity
-        })),
-        paymentMethod: this.paymentMethod,
-        customerName: this.customerInfo.name,
-        customerPhone: this.customerInfo.phone,
-        customerEmail: this.customerInfo.email,
-        paymentStatus: statusText,
-        reference: refNumber
-      };
+      const formData = new FormData();
+      formData.append('products', JSON.stringify(items.map(item => ({
+        code: item.code,
+        quantity: item.quantity
+      }))));
+      formData.append('paymentMethod', this.paymentMethod);
+      formData.append('customerName', this.customerInfo.name);
+      formData.append('customerPhone', this.customerInfo.phone);
+      if (this.customerInfo.email) formData.append('customerEmail', this.customerInfo.email);
+      formData.append('paymentStatus', statusText);
+      formData.append('reference', refNumber);
 
-      this.orderService.createOrder(orderPayload).subscribe({
+      if (this.receiptFile && this.paymentMethod === 'transferencia') {
+        formData.append('receipt', this.receiptFile);
+      }
+
+      this.orderService.createOrder(formData).subscribe({
         next: (res) => {
           this.isProcessingPayment = false;
           this.showPaymentModal = false;
@@ -97,6 +101,13 @@ export class Cart implements OnInit {
   fecharRecibo() {
     this.showReceiptModal = false;
     this.router.navigate(['/']);
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.receiptFile = file;
+    }
   }
 
   checkout() {
