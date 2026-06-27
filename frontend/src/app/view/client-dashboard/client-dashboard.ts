@@ -52,7 +52,9 @@ export class ClientDashboard implements OnInit {
     let filtered = this.products.filter(p => {
       const matchName = p.name.toLowerCase().includes(this.searchTerm.toLowerCase());
       const matchPrice = p.price <= this.maxPrice;
-      const matchCategory = this.categoryFilter === '' || p.category === this.categoryFilter;
+      const productCat = (p.category || 'Geral').trim().toLowerCase();
+      const filterCat = this.categoryFilter.trim().toLowerCase();
+      const matchCategory = filterCat === '' || productCat === filterCat;
       return matchName && matchPrice && matchCategory;
     });
 
