@@ -39,7 +39,7 @@
   }
 
   .hero-section {
-    padding: 10rem 0;
+    padding: 4rem 0;
     background: linear-gradient(135deg, rgba(79, 70, 229, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%);
     position: relative;
     overflow: hidden;
@@ -188,7 +188,10 @@
     .footer-logo {
       height: 50px;
       margin-bottom: 1.5rem;
-      filter: brightness(0) invert(1);
+    }
+
+    p, h5, span {
+      color: rgba(255, 255, 255, 0.85) !important;
     }
 
     .footer-links {
@@ -197,7 +200,7 @@
       li {
         margin-bottom: 0.75rem;
         a {
-          color: #94a3b8;
+          color: rgba(255, 255, 255, 0.65);
           text-decoration: none;
           &:hover { color: white; }
         }
@@ -235,6 +238,6 @@
 }
 
 @media (max-width: 768px) {
-  .hero-section { padding: 6rem 0; }
+  .hero-section { padding: 3rem 0; }
   .section-title { font-size: 2rem; }
 }

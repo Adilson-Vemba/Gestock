@@ -21,14 +21,14 @@
   .auth-left-content {
     position: relative;
     z-index: 2;
-    color: white;
+    color: black;
     max-width: 420px;
 
     .logo-wrap {
       margin-bottom: 2.5rem;
       img {
         height: 48px;
-        filter: brightness(0) invert(1);
+        filter: none !important;
       }
     }
 
@@ -41,7 +41,7 @@
 
     p {
       font-size: 1.05rem;
-      opacity: 0.8;
+      color: black;
       line-height: 1.7;
       margin-bottom: 2.5rem;
     }
@@ -57,6 +57,7 @@
         gap: 1rem;
         font-size: 0.95rem;
         font-weight: 500;
+        color: black;
 
         .feature-icon {
           width: 38px;
